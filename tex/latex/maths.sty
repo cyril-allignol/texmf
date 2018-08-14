@@ -1,0 +1,80 @@
+\ProvidesPackage{maths}
+
+\RequirePackage{amsthm} % amsmath loaded by kpfonts
+\RequirePackage{thmtools}
+\RequirePackage{xifthen}
+
+\theoremstyle{plain}
+%\newtheorem{theorem}{Théorème}[chapter]
+\declaretheorem[
+name = Théorème,
+numberwithin = chapter,
+shaded = {bgcolor = lightgray}
+]{theorem}
+\declaretheorem[name = Corollaire, sibling = theorem]{corollary}
+\declaretheorem[name = Lemme, sibling = theorem]{lemma}
+
+\theoremstyle{definition}
+\declaretheorem[name = Définition, sibling = theorem]{definition}
+\declaretheorem[name = Exemple, sibling = theorem]{example}
+
+\theoremstyle{remark}
+\declaretheorem[name = Remarque, numbered = no]{remark}
+\declaretheorem[name = Notation, numbered = no]{notation}
+
+\newcommand*{\B}{\ensuremath{\mathbb{B}}} % booléens
+\newcommand*{\N}{\ensuremath{\mathbb{N}}} % entiers naturels
+\newcommand*{\Z}{\ensuremath{\mathbb{Z}}} % entiers
+\newcommand*{\R}{\ensuremath{\mathbb{R}}} % réels
+
+\newcommand*{\booleans}{\ensuremath{\mathbb{B}}} % booléens
+\newcommand*{\naturals}{\ensuremath{\mathbb{N}}} % entiers naturels
+\newcommand*{\integers}{\ensuremath{\mathbb{Z}}} % entiers
+\newcommand*{\reals}{\ensuremath{\mathbb{R}}} % réels
+
+\newcommand*{\set}[1]{\ensuremath{\left\{#1\right\}}}
+\newcommand*{\setst}[2]{\ensuremath{\left\{#1 \:|\: #2\right\}}}
+\newcommand*{\settext}[1]{\ensuremath{\set{\text{#1}}}}
+\newcommand*{\card}[1]{\ensuremath{|#1|}}%{\|#1\|}
+\newcommand*{\kleene}[1]{\ensuremath{#1^*}}
+
+\newcommand*{\tuple}[1]{\left\langle#1\right\rangle}
+\newcommand*{\fun}[1]{\mathrm{#1}}%{\mathit{#1}}
+\newcommand*{\zero}{\mathbf{0}()}
+\newcommand*{\const}[1]{\mathbf{#1}()}
+\newcommand*{\successor}[1]{\sigma(#1)}
+\newcommand*{\proj}[3]{\pi_{#1}^{#2}(#3)}
+\newcommand*{\function}[3]{%
+  \ifthenelse{\isempty{#1}}{}{\fun{#1}:}%
+  #2 \longrightarrow #3}
+\newcommand*{\prog}[1]{\mathtt{#1}}
+%\newcommand{\sem}[1]{\mathsf{SEM}\ifthenelse{\isempty{#1}}{}{(\prog{#1})}}
+\newcommand*{\sem}[1]{\textsc{sem}\ifthenelse{\isempty{#1}}{}{(\prog{#1})}}
+\newcommand*{\reduction}[3]{#2 \preceq_c\ifthenelse{\isempty{#1}}{}{^{#1}} #3}
+\newcommand*{\st}{\text{ s.t. }}
+\newcommand*{\deduce}{\vdash}
+
+\RequirePackage[boxed]{algorithm}
+\RequirePackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Entrées\,:}}
+\renewcommand{\algorithmicensure}{\textbf{Sorties\,:}}
+\renewcommand{\algorithmicend}{\textbf{fin}}
+\renewcommand{\algorithmicwhile}{\textbf{tant que}}
+\renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicelse}{\textbf{sinon}}
+\renewcommand{\algorithmicfor}{\textbf{pour}}
+\renewcommand{\algorithmicforall}{\textbf{pour tout}}
+\renewcommand{\algorithmicdo}{\textbf{faire}}
+\renewcommand{\algorithmicloop}{\textbf{boucler}}
+\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
+\renewcommand{\algorithmicuntil}{\textbf{jusqu'à}}
+\renewcommand{\algorithmicreturn}{\textbf{renvoyer}}
+\renewcommand{\algorithmiccomment}[1]{\hspace{1em} // #1}
+\floatname{algorithm}{Algorithme}
+\let\mylistof\listof
+\renewcommand\listof[2]{\mylistof{algorithm}{Liste des algorithmes}}
+% pour palier au problème de niveau des algos
+\makeatletter
+\providecommand*{\toclevel@algorithm}{0}
+\makeatother

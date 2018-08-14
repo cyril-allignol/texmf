@@ -1,0 +1,90 @@
+\ProvidesPackage{mystyle}
+
+\RequirePackage{scrhack}
+
+\KOMAoption{fontsize}{11pt}
+\KOMAoption{captions}{nooneline}
+\KOMAoption{captions}{tableheading}
+\KOMAoption{bibliography}{totoc}
+\KOMAoption{chapterentrydots}{true}
+\KOMAoption{numbers}{noendperiod}
+% \KOMAoption{chapterprefix}{true}
+\KOMAoption{titlepage}{firstiscover}
+\KOMAoption{parskip}{half}
+
+\PassOptionsToPackage{fleqn}{amsmath}
+
+\RequirePackage[showlanguages]{babel}
+\newcommand*{\foreign}[2][english]{\textit{\foreignlanguage{#1}{#2}}}
+
+\RequirePackage[final, babel]{microtype}
+
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{threeparttable}
+
+\RequirePackage{subcaption}
+
+\RequirePackage{enumitem}
+
+\RequirePackage[autolanguage]{numprint}
+\RequirePackage{siunitx}
+% Link babel language to siunitx locale
+\addto\extrasenglish{\sisetup{locale = US}}
+\addto\extrasfrench{\sisetup{locale = FR}}
+
+\RequirePackage{tikz}
+\RequirePackage{pstricks}
+\RequirePackage{graphicx}
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+
+\RequirePackage{csquotes}
+\RequirePackage{aeguill}
+
+\RequirePackage{comment}
+
+\RequirePackageWithOptions{kpfonts}
+
+\RequirePackage{lipsum} % for testing purpose
+
+\KOMAoption{DIV}{calc}
+
+\RequirePackage[within = chapter]{newfloat}
+\addtokomafont{caption}{\small}
+\addtokomafont{captionlabel}{\sffamily\bfseries}
+\renewcommand*{\tableformat}{\tablename~\thetable}
+\renewcommand*{\figureformat}{\figurename~\thefigure}
+
+\RequirePackage{mdframed}
+\DeclareFloatingEnvironment[fileext = frm]{framed}
+\newenvironment{info}[1]{
+  \begin{framed}[tb]
+    \begin{mdframed}[linewidth = 0pt,
+      roundcorner = 10pt, backgroundcolor = gray!30]
+      % \minisec{#1}
+      \textbf{\large #1}
+
+      \medskip
+    }{\end{mdframed}\end{framed}}
+
+\renewcommand*{\chapterformat}{%
+  \mbox{\chapappifchapterprefix{\nobreakspace}\thechapter
+    \autodot\IfUsePrefixLine{}{\enskip}{\color{lightgray}|\enskip}}}
+
+\setkomafont{labelinglabel}{\sffamily\bfseries}
+
+% Misc. commands
+\newcommand*{\eg}{\textit{e.g.}}
+\newcommand*{\ie}{\textit{i.e.}}
+\newcommand*{\circled}[1]{%
+  \tikz[baseline = (char.base)]{%
+    \node[shape = circle, draw, inner sep = 0.05em] (char) {#1};}}
+
+\RequirePackage[
+pdfusetitle,
+hidelinks, linktoc = all, % colorlinks = true,
+]{hyperref}
+
+\endinput
