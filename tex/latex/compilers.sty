@@ -1,52 +1,40 @@
 \ProvidesPackage{compilers}
 
-%% Formal languages
+\RequirePackage{xparse}
 
-\newcommand*{\emptyword}{\ensuremath{\Lambda}}
-\newcommand*{\length}[1]{\ensuremath{\left|#1\right|}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Formal languages commands
+
+\newcommand*{\emptyword}{\Lambda}
+\newcommand*{\length}[1]{\left|#1\right|}
 \newcommand*{\concat}{\bullet}
+\newcommand*{\efermeture}{\text{$\varepsilon$-fermeture}}
 
-%% Compilers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Typeset derivation trees
 
-\usepackage{synttree}
-\usepackage{xparse}
+\RequirePackage{synttree}
 
-\usepackage[nounderscore]{syntax}
-\renewcommand{\syntleft}{\ttfamily\scshape}
-\renewcommand{\syntright}{}
-\renewcommand{\litleft}{\ttfamily\bfseries}
-\renewcommand{\litright}{}
-\renewcommand{\ulitleft}{\ttfamily\bfseries}
-\renewcommand{\ulitright}{}
-\newcommand{\production}{$\Coloneqq$}
-\setlength{\grammarparsep}{3pt}
-\setlength{\grammarindent}{5em}
+%%%%%%%%%%%%%%%%%%%
+%% Typeset grammars
 
-\newcommand{\efermeture}{$\varepsilon$-fermeture}
-\newcommand{\regexp}{\textit{regexp}}
+\RequirePackage{grammar}
 
-\newcommand{\token}[1]{$\langle$#1$\rangle$}
-\newcommand{\pointer}[1]{$\stackrel{\text{\tiny#1}}{\longrightarrow}$}
-\newcommand{\nonterm}[1]{\texttt{\textsc{#1}}}
-\newcommand{\term}[1]{\texttt{\textbf{#1}}}
-\newcommand{\produce}{\ensuremath{\Rightarrow}}
-\newcommand{\produces}{\ensuremath{\Rightarrow^*}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Custom grammar commands
 
-\newcommand{\post}[1]{\mathcal{P}(#1)}
-
-\newenvironment{grammaire}{
-  \begin{tabular}{>{\ttfamily}l>{\production{} \ttfamily }l}}{
-  \end{tabular}}
-
-\NewDocumentCommand\first{o}{%
-  \ensuremath{\textsc{first}\IfNoValueTF{#1}{}{(#1)}}%
+\newcommand*{\token}[1]{$\langle$#1$\rangle$}
+\newcommand*{\pointer}[1]{$\stackrel{\text{\tiny#1}}{\longrightarrow}$}
+\NewDocumentCommand\derive{s}{%
+  \IfBooleanTF{#1}{\stackrel{*}{\Rightarrow}}{\Rightarrow}%
 }
-\NewDocumentCommand\last{o}{%
-  \ensuremath{\textsc{last}\IfNoValueTF{#1}{}{(#1)}}%
-}
-\NewDocumentCommand\follow{o}{%
-  \ensuremath{\textsc{follow}\IfNoValueTF{#1}{}{(#1)}}%
-}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Custom compilation commands
+
+\NewDocumentCommand\first{o}{\textsc{first}\IfValueT{#1}{(#1)}}
+\NewDocumentCommand\last{o}{\textsc{last}\IfValueT{#1}{(#1)}}
+\NewDocumentCommand\follow{o}{\textsc{follow}\IfValueT{#1}{(#1)}}
 
 \usetikzlibrary{calc, arrows, shapes, positioning}
 
@@ -74,6 +62,9 @@ draw, ellipse, gray, inner xsep = -10pt, inner ysep = 2pt]
 text centered, font = \scriptsize, text = gray,
 fill = white, inner sep = 1pt]
 
+%%%%%%%%%%%%%%%%%%%%%
+%% Customize automata
+
 \newenvironment{automaton}[2]{
   \begin{tikzpicture}[auto,
     initial/.style = {
@@ -84,6 +75,9 @@ fill = white, inner sep = 1pt]
     every path/.style = { thick, ->, >=stealth', font = \small },
     node distance = { #1 and #2 }]
 }{\end{tikzpicture}}
+
+%%%%%%%%%%%%%
+%% T-diagrams
 
 \newlength{\s}
 \setlength{\s}{1.8em}

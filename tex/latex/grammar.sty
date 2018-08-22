@@ -1,0 +1,90 @@
+%% Greatly inspired by the "syntax" package by Mark Wooding
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{grammar}[2018/08/21 0.1 Typesetting BNF grammars]
+
+\RequirePackage{xparse}
+\RequirePackage{xifthen}
+\RequirePackage{xstring}
+
+\NewDocumentCommand{\bnfntfont}{}{\itshape}
+\NewDocumentCommand{\bnfntleft}{}{$\langle$}
+\NewDocumentCommand{\bnfntright}{}{$\rangle$}
+\NewDocumentCommand{\bnftsfont}{}{\bfseries\ttfamily}
+\NewDocumentCommand{\bnftsleft}{}{`}
+\NewDocumentCommand{\bnftsright}{}{'}
+\NewDocumentCommand{\productionop}{}{\mathrel{\Coloneqq}}
+\NewDocumentCommand{\altop}{}{\mathrel{|}}
+
+\NewDocumentCommand{\bnfnt}{m}{\text{\bnfntleft{\bnfntfont#1}\bnfntright}}
+\NewDocumentCommand{\bnfts}{m}{\text{\bnftsleft{\bnftsfont#1}\bnftsright}}
+
+\newboolean{numrules}\setboolean{numrules}{false}
+\newboolean{inline}\setboolean{inline}{false}
+\newboolean{repeatnt}\setboolean{repeatnt}{false}
+
+\newcounter{ruleno}
+\NewDocumentCommand{\rulenumber}{}{{\color{gray}\arabic{ruleno}.}}
+\NewDocumentCommand{\newrule}{}{%
+  \stepcounter{ruleno}%
+  \item[\ifthenelse{\boolean{numrules}}{\rulenumber}{}]}
+
+\newsavebox{\rulelabel}
+
+\begingroup%
+\catcode`< = \active%
+\catcode`" = \active%
+\catcode`| = \active%
+\gdef\prod#1|={%
+  \savebox{\rulelabel}{$#1 \productionop$}%
+  \ifthenelse{\boolean{inline}}%
+  {\usebox{\rulelabel}}%
+  {\newrule\usebox{\rulelabel}}}%
+\gdef|{%
+  \ifthenelse{\boolean{inline}}%
+  {$\altop$}%
+  {\newrule\makebox[\wd\rulelabel][r]{$\altop$}}}%
+\gdef<#1>{\bnfnt{#1}}%
+\gdef"#1"{\bnfts{#1}}%
+\endgroup%
+\NewDocumentCommand{\activategrammar}{}{%
+  \catcode`< = \active%
+  \catcode`" = \active%
+  \catcode`| = \active%
+}
+
+\NewDocumentEnvironment{inlinegrammar}{}
+{\setboolean{inline}{true}\activategrammar}{}
+
+\NewDocumentEnvironment{grammar}{sO{bnf}}{%
+  \setcounter{ruleno}{0}%
+  \setboolean{numrules}{\IfBooleanTF{#1}{false}{true}}%
+  \IfStrEq{#2}{simple}{%
+    \RenewDocumentCommand{\bnfntfont}{}{\itshape}
+    \RenewDocumentCommand{\bnfntleft}{}{}
+    \RenewDocumentCommand{\bnfntright}{}{}
+    \RenewDocumentCommand{\bnftsfont}{}{\bfseries\ttfamily}
+    \RenewDocumentCommand{\bnftsleft}{}{}
+    \RenewDocumentCommand{\bnftsright}{}{}
+    \RenewDocumentCommand{\productionop}{}{\mathrel{\rightarrow}}
+    \RenewDocumentCommand{\altop}{}{\mathrel{\rightarrow}}
+  }{}
+  \par\activategrammar%
+  \list{}{%
+    \setlength{\labelwidth}{\IfBooleanTF{#1}{\z@}{1em}}
+    \setlength{\labelsep}{\IfBooleanTF{#1}{\z@}{0.4em}}
+    \setlength{\leftmargin}{\dimexpr \labelwidth + \labelsep}
+    \setlength{\itemindent}{\z@}
+    \setlength{\listparindent}{\z@}
+    \setlength{\parsep}{\z@}
+    \setlength{\itemsep}{\z@}
+  }
+}{\endlist\par\relax}
+
+%% Place the star at a more intuitive position
+\ExplSyntaxOn
+\cs_new:cpn {grammar*} {\grammar*}
+\cs_new_eq:cN {endgrammar*} \endgrammar
+\ExplSyntaxOff
+
+\endinput
