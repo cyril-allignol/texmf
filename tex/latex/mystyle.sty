@@ -12,6 +12,8 @@
 \KOMAoption{titlepage}{firstiscover}
 \KOMAoption{parskip}{half}
 
+\RequirePackage{xparse}
+
 \PassOptionsToPackage{fleqn}{amsmath}
 
 \RequirePackage[showlanguages]{babel}
@@ -27,7 +29,6 @@
 
 \RequirePackage{enumitem}
 
-\RequirePackage[autolanguage]{numprint}
 \RequirePackage{siunitx}
 % Link babel language to siunitx locale
 \addto\extrasenglish{\sisetup{locale = US}}
@@ -40,7 +41,7 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 
-\RequirePackage{csquotes}
+\RequirePackage[strict]{csquotes}
 \RequirePackage{aeguill}
 
 \RequirePackage{comment}
