@@ -21,7 +21,8 @@
 
 \newboolean{numrules}\setboolean{numrules}{false}
 \newboolean{inline}\setboolean{inline}{false}
-\newboolean{repeatnt}\setboolean{repeatnt}{false}
+\newboolean{inlinerules}\setboolean{inlinerules}{false}
+\newboolean{repeatnt}\setboolean{repeatnt}{true}
 
 \newcounter{ruleno}
 \NewDocumentCommand{\rulenumber}{}{{\color{gray}\arabic{ruleno}.}}
@@ -41,9 +42,11 @@
   {\usebox{\rulelabel}}%
   {\newrule\usebox{\rulelabel}}}%
 \gdef|{%
-  \ifthenelse{\boolean{inline}}%
+  \ifthenelse{\boolean{inlinerules}}%
   {$\altop$}%
-  {\newrule\makebox[\wd\rulelabel][r]{$\altop$}}}%
+  {\ifthenelse{\boolean{repeatnt}}%
+    {\newrule\usebox{\rulelabel}}%
+    {\newrule\makebox[\wd\rulelabel][r]{$\altop$}}}}%
 \gdef<#1>{\bnfnt{#1}}%
 \gdef"#1"{\bnfts{#1}}%
 \endgroup%
@@ -54,21 +57,28 @@
 }
 
 \NewDocumentEnvironment{inlinegrammar}{}
-{\setboolean{inline}{true}\activategrammar}{}
+{\setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar}{}
 
-\NewDocumentEnvironment{grammar}{sO{bnf}}{%
+\NewDocumentEnvironment{grammar}{sO{default}}{%
+  % \setboolean{inlinerules}{true}%
   \setcounter{ruleno}{0}%
   \setboolean{numrules}{\IfBooleanTF{#1}{false}{true}}%
-  \IfStrEq{#2}{simple}{%
-    \RenewDocumentCommand{\bnfntfont}{}{\itshape}
-    \RenewDocumentCommand{\bnfntleft}{}{}
-    \RenewDocumentCommand{\bnfntright}{}{}
-    \RenewDocumentCommand{\bnftsfont}{}{\bfseries\ttfamily}
-    \RenewDocumentCommand{\bnftsleft}{}{}
-    \RenewDocumentCommand{\bnftsright}{}{}
-    \RenewDocumentCommand{\productionop}{}{\mathrel{\rightarrow}}
-    \RenewDocumentCommand{\altop}{}{\mathrel{\rightarrow}}
-  }{}
+  \IfStrEqCase{#2}{%
+    {default}{%
+      \RenewDocumentCommand{\bnfntleft}{}{$\langle$}
+      \RenewDocumentCommand{\bnfntright}{}{$\rangle$}
+      \RenewDocumentCommand{\bnftsleft}{}{}
+      \RenewDocumentCommand{\bnftsright}{}{}
+      \RenewDocumentCommand{\productionop}{}{\mathrel{\Coloneqq}}
+    }
+    {simple}{%
+      \RenewDocumentCommand{\bnfntleft}{}{}
+      \RenewDocumentCommand{\bnfntright}{}{}
+      \RenewDocumentCommand{\bnftsleft}{}{}
+      \RenewDocumentCommand{\bnftsright}{}{}
+      \RenewDocumentCommand{\productionop}{}{\mathrel{\rightarrow}}
+    }
+  }
   \par\activategrammar%
   \list{}{%
     \setlength{\labelwidth}{\IfBooleanTF{#1}{\z@}{1em}}
