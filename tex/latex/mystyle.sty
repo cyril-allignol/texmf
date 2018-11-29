@@ -6,10 +6,18 @@
 \KOMAoption{captions}{nooneline}
 \KOMAoption{captions}{tableheading}
 \KOMAoption{bibliography}{totoc}
-\KOMAoption{chapterentrydots}{true}
+
+\makeatletter
+\@ifclassloaded{scrbook}{%
+  \KOMAoption{chapterentrydots}{true}%
+  % \KOMAoption{chapterprefix}{true}
+  \KOMAoption{titlepage}{firstiscover}%
+  \renewcommand*{\chapterformat}{%
+    \mbox{\chapappifchapterprefix{\nobreakspace}\thechapter%
+      \autodot\IfUsePrefixLine{}{\enskip}{\color{lightgray}|\enskip}}}%
+}{}
+\makeatother
 \KOMAoption{numbers}{noendperiod}
-% \KOMAoption{chapterprefix}{true}
-\KOMAoption{titlepage}{firstiscover}
 \KOMAoption{parskip}{half}
 
 \RequirePackage{xparse}
@@ -52,7 +60,13 @@
 
 \KOMAoption{DIV}{calc}
 
-\RequirePackage[within = chapter]{newfloat}
+\makeatletter
+\@ifclassloaded{scrbook}{%
+  \RequirePackage[within = chapter]{newfloat}%
+}{%
+  \RequirePackage{newfloat}%
+}
+\makeatother
 \addtokomafont{caption}{\small}
 \addtokomafont{captionlabel}{\sffamily\bfseries}
 \renewcommand*{\tableformat}{\tablename~\thetable}
@@ -69,10 +83,6 @@
 
       \medskip
     }{\end{mdframed}\end{framed}}
-
-\renewcommand*{\chapterformat}{%
-  \mbox{\chapappifchapterprefix{\nobreakspace}\thechapter
-    \autodot\IfUsePrefixLine{}{\enskip}{\color{lightgray}|\enskip}}}
 
 \setkomafont{labelinglabel}{\sffamily\bfseries}
 
