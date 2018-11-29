@@ -16,8 +16,14 @@
 \NewDocumentCommand{\productionop}{}{\mathrel{\Coloneqq}}
 \NewDocumentCommand{\altop}{}{\mathrel{|}}
 
-\NewDocumentCommand{\bnfnt}{m}{\text{\bnfntleft{\bnfntfont#1}\bnfntright}}
-\NewDocumentCommand{\bnfts}{m}{\text{\bnftsleft{\bnftsfont#1}\bnftsright}}
+\NewDocumentCommand{\bnfnt}{sm}{%
+  \text{\IfBooleanTF{#1}{}{\bnfntleft}%
+    {\bnfntfont#2}%
+    \IfBooleanTF{#1}{}{\bnfntright}}}
+\NewDocumentCommand{\bnfts}{sm}{%
+  \text{\IfBooleanTF{#1}{}{\bnftsleft}%
+    {\bnftsfont#2}%
+    \IfBooleanTF{#1}{}{\bnftsright}}}
 
 \newboolean{numrules}\setboolean{numrules}{false}
 \newboolean{inline}\setboolean{inline}{false}
