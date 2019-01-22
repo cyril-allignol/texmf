@@ -8,7 +8,9 @@
 \newcommand*{\emptyword}{\Lambda}
 \newcommand*{\length}[1]{\left|#1\right|}
 \newcommand*{\concat}{\bullet}
-\newcommand*{\efermeture}{\text{$\varepsilon$-fermeture}}
+\newcommand*{\epstrans}{\varepsilon}
+\newcommand*{\efermeture}{$\epstrans$-fermeture}
+\NewDocumentCommand{\trans}{s}{\vdash\IfBooleanT{#1}{^*}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Typeset derivation trees
@@ -36,7 +38,8 @@
 \NewDocumentCommand\last{o}{\textsc{last}\IfValueT{#1}{(#1)}}
 \NewDocumentCommand\follow{o}{\textsc{follow}\IfValueT{#1}{(#1)}}
 
-\usetikzlibrary{calc, arrows, shapes, positioning}
+\RequirePackage{tikz}
+\usetikzlibrary{calc, arrows, shapes, positioning, automata}
 
 \tikzstyle{component} = [
 rectangle, draw = blue, fill = blue!20,
@@ -65,16 +68,29 @@ fill = white, inner sep = 1pt]
 %%%%%%%%%%%%%%%%%%%%%
 %% Customize automata
 
-\newenvironment{automaton}[2]{
+% #1, #2: vertical and horizontal node separation
+\newenvironment{automaton}[2]{%
   \begin{tikzpicture}[auto,
     initial/.style = {
       initial by arrow, initial text =, initial distance = 0.01cm},
-    every state/.style = {
-      minimum size = 1.5em, font = \small,
-      draw = blue!50, very thick, fill = blue!20},
+    every state/.style = {minimum size = 1.5em, font = \small, thick},
     every path/.style = { thick, ->, >=stealth', font = \small },
+    % every loop/.style = {min distance = 1cm, looseness = 10},
     node distance = { #1 and #2 }]
-}{\end{tikzpicture}}
+  }{\end{tikzpicture}}
+
+% \state[*>]{identifier}{label}[options (e.g. position)]
+% *: accepting state
+% >: initial state
+\NewDocumentCommand{\state}{st>mmO{}}{%
+  \node
+  [state, \IfBooleanT{#1}{accepting}, \IfBooleanT{#2}{initial}, #5]
+  (#3) {#4};}
+
+% \transition{sourceID}{destID}{label}[options (e.g. loop)]
+\NewDocumentCommand{\transition}{mmmO{}}{%
+  \path (#1) edge[#4] node{#3} (#2);
+}
 
 %%%%%%%%%%%%%
 %% T-diagrams
@@ -116,3 +132,5 @@ fill = white, inner sep = 1pt]
   \draw[thick] (O) ++(-0.5\s, -0.5\s) arc (-120:-60:\s) -- ++(0, \s) --
   ++(-\s, 0) -- cycle;
 }
+
+\endinput
