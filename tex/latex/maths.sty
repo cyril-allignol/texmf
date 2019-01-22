@@ -4,23 +4,28 @@
 \RequirePackage{thmtools}
 \RequirePackage{xifthen}
 
-\theoremstyle{plain}
-%\newtheorem{theorem}{Théorème}[chapter]
-\declaretheorem[
-name = Théorème,
-numberwithin = chapter,
-shaded = {bgcolor = lightgray}
-]{theorem}
-\declaretheorem[name = Corollaire, sibling = theorem]{corollary}
-\declaretheorem[name = Lemme, sibling = theorem]{lemma}
+\makeatletter
+\@ifclassloaded{beamer}{%
+}{%
+  \theoremstyle{plain}
+  % \newtheorem{theorem}{Théorème}[chapter]
+  \declaretheorem[
+  name = Théorème,
+  numberwithin = chapter,
+  shaded = {bgcolor = lightgray}
+  ]{theorem}
+  \declaretheorem[name = Corollaire, sibling = theorem]{corollary}
+  \declaretheorem[name = Lemme, sibling = theorem]{lemma}
 
-\theoremstyle{definition}
-\declaretheorem[name = Définition, sibling = theorem]{definition}
-\declaretheorem[name = Exemple, sibling = theorem]{example}
+  \theoremstyle{definition}
+  \declaretheorem[name = Définition, sibling = theorem]{definition}
+  \declaretheorem[name = Exemple, sibling = theorem]{example}
 
-\theoremstyle{remark}
-\declaretheorem[name = Remarque, numbered = no]{remark}
-\declaretheorem[name = Notation, numbered = no]{notation}
+  \theoremstyle{remark}
+  \declaretheorem[name = Remarque, numbered = no]{remark}
+  \declaretheorem[name = Notation, numbered = no]{notation}
+}
+\makeatother
 
 \newcommand*{\B}{\ensuremath{\mathbb{B}}} % booléens
 \newcommand*{\N}{\ensuremath{\mathbb{N}}} % entiers naturels
@@ -31,7 +36,7 @@ shaded = {bgcolor = lightgray}
 \newcommand*{\setst}[2]{\ensuremath{\left\{#1 \:|\: #2\right\}}}
 \newcommand*{\settext}[1]{\ensuremath{\set{\text{#1}}}}
 \newcommand*{\card}[1]{\ensuremath{|#1|}}%{\|#1\|}
-\newcommand*{\kleene}[1]{\ensuremath{#1^*}}
+\newcommand*{\kleene}[1]{\ensuremath{{#1}^*}}
 
 \newcommand*{\tuple}[1]{\left\langle#1\right\rangle}
 \newcommand*{\fun}[1]{\mathrm{#1}}%{\mathit{#1}}
@@ -73,3 +78,5 @@ shaded = {bgcolor = lightgray}
 \makeatletter
 \providecommand*{\toclevel@algorithm}{0}
 \makeatother
+
+\endinput
