@@ -20,43 +20,9 @@
 \KOMAoption{numbers}{noendperiod}
 \KOMAoption{parskip}{half}
 
-\RequirePackage{xparse}
-
-\PassOptionsToPackage{fleqn}{amsmath}
-
-\RequirePackage[showlanguages]{babel}
-\newcommand*{\foreign}[2][english]{\textit{\foreignlanguage{#1}{#2}}}
-
-\RequirePackage[final, babel]{microtype}
-
-\RequirePackage{booktabs}
-\RequirePackage{tabularx}
-\RequirePackage{threeparttable}
-
-\RequirePackage{subcaption}
-
-\RequirePackage{enumitem}
-
-\RequirePackage{siunitx}
-% Link babel language to siunitx locale
-\addto\extrasenglish{\sisetup{locale = US}}
-\addto\extrasfrench{\sisetup{locale = FR}}
-
-\RequirePackage{tikz}
-\RequirePackage{pstricks}
-\RequirePackage{graphicx}
-
-\RequirePackage[utf8]{inputenc}
-\RequirePackage[T1]{fontenc}
-
-\RequirePackage[strict]{csquotes}
-\RequirePackage{aeguill}
-
-\RequirePackage{comment}
+\RequirePackage{mypackages}
 
 \RequirePackageWithOptions{kpfonts}
-
-\RequirePackage{lipsum} % for testing purpose
 
 \KOMAoption{DIV}{calc}
 
@@ -85,19 +51,5 @@
     }{\end{mdframed}\end{framed}}
 
 \setkomafont{labelinglabel}{\sffamily\bfseries}
-
-% Misc. commands
-\newcommand*{\eg}{\textit{e.g.}}
-\newcommand*{\ie}{\textit{i.e.}}
-\newcommand*{\circled}[1]{%
-  \tikz[baseline = (char.base)]{%
-    \node[shape = circle, draw, inner sep = 0.05em] (char) {#1};}}
-
-\RequirePackage[
-pdfusetitle,
-hidelinks, linktoc = all, % colorlinks = true,
-]{hyperref}
-
-\newcommand*{\email}[1]{\href{mailto:#1}{\nolinkurl{#1}}}
 
 \endinput
