@@ -1,0 +1,116 @@
+\ProvidesPackage{code}
+
+\RequirePackage{xparse}
+
+\NewDocumentCommand{\ocaml}{}{OCaml}
+\NewDocumentCommand{\ocamllex}{}{OCamllex}
+\NewDocumentCommand{\ocamlyacc}{}{OCamlyacc}
+\NewDocumentCommand{\lex}{m}{\textcolor{red}{\texttt{#1}}}
+
+%\RequirePackage{listings}
+\RequirePackage{listingsutf8}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{listings, skins}
+
+\definecolor{dkgreen}{rgb}{0, 0.5, 0}
+\definecolor{dkred}{rgb}{0.6, 0, 0}
+\definecolor{dkblue}{rgb}{0, 0, 0.6}
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{mauve}{rgb}{0.58, 0, 0.82}
+\definecolor{midgray}{rgb}{0.65, 0.65, 0.65}
+\definecolor{lightgray}{rgb}{0.9, 0.9, 0.9}
+
+\lstset{ % default listings settings
+  inputencoding = utf8/latin1,
+  basicstyle = \small\ttfamily,%\bfseries,
+  numbers = left,
+  numberstyle = \tiny\color{gray},
+  stepnumber = 1,
+  numbersep = 5pt,
+  showspaces = false,
+  showstringspaces = false,
+  showtabs = false,
+  tabsize = 2,
+  aboveskip = 0pt,
+  belowskip = 0pt,
+  nolol,
+  extendedchars = true,
+  breaklines = true,
+  breakatwhitespace = false,
+  keywordstyle = \color{dkgreen},
+  commentstyle = \color{dkblue},
+  stringstyle = \color{mauve},
+  escapeinside = {(*@}{@*)}, % if you want to add LaTeX within your code
+}
+
+\lstdefinelanguage{frpseudocode}{
+  morekeywords = {
+    si, alors, sinon, finsi,
+    tantque, faire, fintantque
+  }
+}
+
+\lstdefinelanguage{mylang}{morekeywords={begin, end}}
+\lstdefinelanguage{analyse}{
+  morekeywords = {proc, essaie, ou, si, alors, sinon, renvoyer},
+  string = [b]{"}, comment = [l]//
+}
+
+\lstdefinestyle{term}{language = {bash}, numbers = none}
+\lstdefinestyle{nonum}{numbers = none}
+\lstdefinestyle{tokens}{
+  mathescape,
+  basicstyle = \footnotesize\normalfont,
+  xleftmargin = 5pt,
+  breaklines = true, breakatwhitespace = true
+}
+
+\tcbset{% my default settings
+  skin = enhanced,
+  boxrule = 1mm, top = 0.5mm, bottom = 0.5mm, right = 0.5mm,
+  fonttitle = \bfseries\footnotesize, %coltitle = black,
+  listing only
+}
+
+\tcbset{
+  terminal/.style = {
+    left = 2mm,
+    colback = black!5!white,
+    colupper = black,
+    listing options = {style = term}
+  }
+}
+
+\tcbset{
+  terminalhelp/.style = {
+    listing and comment,
+    skin = bicolor,
+    comment = {#1},
+    left = 2mm,
+    frame style = {color = black!75!white},
+    colback = black!5!white,
+    colupper = black,
+    colbacklower = black!75!white,
+    collower = white,
+    listing options = {style = term}
+  }
+}
+
+\tcbset{
+  code/.style = {
+    frame style = {color = yellow!40!black},
+    colback = yellow!15,
+    listing options = {language = #1}
+  }
+}
+
+\tcbset{
+  code3a/.style = {
+    frame style = {color = yellow!40!black},
+    colback = yellow!15,
+    left = 0mm, right = 0mm,
+    listing options = {numbers = none}
+  }
+}
+
+\endinput
