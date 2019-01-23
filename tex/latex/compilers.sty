@@ -27,8 +27,11 @@
 
 \newcommand*{\token}[1]{$\langle$#1$\rangle$}
 \newcommand*{\pointer}[1]{$\stackrel{\text{\tiny#1}}{\longrightarrow}$}
-\NewDocumentCommand\derive{s}{%
-  \IfBooleanTF{#1}{\stackrel{*}{\Rightarrow}}{\Rightarrow}%
+\NewDocumentCommand{\derivesymbol}{}{\Rightarrow}
+\NewDocumentCommand{\derive}{so}{%
+  \IfBooleanTF{#1}{\stackrel{*}{\derivesymbol}}%
+  {\IfValueTF{#2}{\stackrel{\scriptsize #2}{\derivesymbol}}%
+    {\derivesymbol}}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
