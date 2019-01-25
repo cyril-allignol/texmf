@@ -1,82 +1,85 @@
 \ProvidesPackage{maths}
 
+% Dependencies
 \RequirePackage{amsthm} % amsmath loaded by kpfonts
 \RequirePackage{thmtools}
 \RequirePackage{xifthen}
+\RequirePackage{xparse}
+\RequirePackage{mathtools}
 
+% Theorem-like environments
+\providetranslation[to = French]{Theorem}{Théorème}
+\providetranslation[to = French]{Corollary}{Corollaire}
+\providetranslation[to = French]{Lemma}{Lemme}
+\providetranslation[to = French]{Definition}{Définition}
+\providetranslation[to = French]{Example}{Exemple}
+\providetranslation[to = French]{Remark}{Remarque}
+\providetranslation[to = French]{Notation}{Notation}
 \makeatletter
 \@ifclassloaded{beamer}{%
 }{%
   \theoremstyle{plain}
-  % \newtheorem{theorem}{Théorème}[chapter]
   \declaretheorem[
-  name = Théorème,
+  name = \translate{Theorem},
   numberwithin = chapter,
   shaded = {bgcolor = lightgray}
   ]{theorem}
-  \declaretheorem[name = Corollaire, sibling = theorem]{corollary}
-  \declaretheorem[name = Lemme, sibling = theorem]{lemma}
+  \declaretheorem[name = \translate{Corollary}, sibling = theorem]{corollary}
+  \declaretheorem[name = \translate{Lemma}, sibling = theorem]{lemma}
 
   \theoremstyle{definition}
-  \declaretheorem[name = Définition, sibling = theorem]{definition}
-  \declaretheorem[name = Exemple, sibling = theorem]{example}
+  \declaretheorem[name = \translate{Definition}, sibling = theorem]{definition}
+  \declaretheorem[name = \translate{Example}, sibling = theorem]{example}
 
   \theoremstyle{remark}
-  \declaretheorem[name = Remarque, numbered = no]{remark}
-  \declaretheorem[name = Notation, numbered = no]{notation}
+  \declaretheorem[name = \translate{Remark}, numbered = no]{remark}
+  \declaretheorem[name = \translate{Notation}, numbered = no]{notation}
 }
 \makeatother
 
-\newcommand*{\B}{\mathbb{B}} % booléens
-\newcommand*{\N}{\mathbb{N}} % entiers naturels
-\newcommand*{\Z}{\mathbb{Z}} % entiers
-\newcommand*{\R}{\mathbb{R}} % réels
+% A few paired delimiters
+\DeclarePairedDelimiter{\parentheses}{\lparen}{\rparen}
+\DeclarePairedDelimiter{\squarebrackets}{\lbrack}{\rbrack}
+\DeclarePairedDelimiter{\curlybrackets}{\{}{\}}
+\DeclarePairedDelimiter{\angles}{\langle}{\rangle}
+\DeclarePairedDelimiter{\verticalbars}{\lvert}{\rvert}
 
-\newcommand*{\set}[1]{\left\{#1\right\}}
-\newcommand*{\setst}[2]{\left\{#1 \:|\: #2\right\}}
-\newcommand*{\settext}[1]{\set{\text{#1}}}
-\newcommand*{\card}[1]{|#1|}%{\|#1\|}
-\newcommand*{\kleene}[1]{{#1}^*}
+% Numbers
+\NewDocumentCommand{\B}{}{\mathbb{B}} % booleans
+\NewDocumentCommand{\N}{}{\mathbb{N}} % natural number
+\NewDocumentCommand{\Z}{}{\mathbb{Z}} % integers
+\NewDocumentCommand{\Q}{}{\mathbb{Q}} % rational numbers
+\NewDocumentCommand{\R}{}{\mathbb{R}} % real numbers
+\NewDocumentCommand{\C}{}{\mathbb{C}} % complex numbers
 
-\newcommand*{\tuple}[1]{\left\langle#1\right\rangle}
-\newcommand*{\fun}[1]{\mathrm{#1}}%{\mathit{#1}}
-\newcommand*{\zero}{\mathbf{0}()}
-\newcommand*{\const}[1]{\mathbf{#1}()}
-\newcommand*{\successor}[1]{\sigma(#1)}
-\newcommand*{\proj}[3]{\pi_{#1}^{#2}(#3)}
-\newcommand*{\function}[3]{%
-  \ifthenelse{\isempty{#1}}{}{\fun{#1}:}%
-  #2 \longrightarrow #3}
-\newcommand*{\prog}[1]{\mathtt{#1}}
-%\newcommand{\sem}[1]{\mathsf{SEM}\ifthenelse{\isempty{#1}}{}{(\prog{#1})}}
-\newcommand*{\sem}[1]{\textsc{sem}\ifthenelse{\isempty{#1}}{}{(\prog{#1})}}
-\newcommand*{\reduction}[3]{#2 \preceq_c\ifthenelse{\isempty{#1}}{}{^{#1}} #3}
-\newcommand*{\st}{\text{ s.t. }}
-\newcommand*{\deduce}{\vdash}
+% General commands
+\NewDocumentCommand{\tuple}{m}{\angles*{#1}}
+\NewDocumentCommand{\fun}{m}{\mathrm{#1}}
+\NewDocumentCommand{\function}{omm}{%
+  \IfValueTF{#1}{\fun{#1}:}{}#2 \longrightarrow #3}
 
-\RequirePackage[boxed]{algorithm}
-\RequirePackage{algorithmic}
-\renewcommand{\algorithmicrequire}{\textbf{Entrées\,:}}
-\renewcommand{\algorithmicensure}{\textbf{Sorties\,:}}
-\renewcommand{\algorithmicend}{\textbf{fin}}
-\renewcommand{\algorithmicwhile}{\textbf{tant que}}
-\renewcommand{\algorithmicif}{\textbf{si}}
-\renewcommand{\algorithmicthen}{\textbf{alors}}
-\renewcommand{\algorithmicelse}{\textbf{sinon}}
-\renewcommand{\algorithmicfor}{\textbf{pour}}
-\renewcommand{\algorithmicforall}{\textbf{pour tout}}
-\renewcommand{\algorithmicdo}{\textbf{faire}}
-\renewcommand{\algorithmicloop}{\textbf{boucler}}
-\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
-\renewcommand{\algorithmicuntil}{\textbf{jusqu'à}}
-\renewcommand{\algorithmicreturn}{\textbf{renvoyer}}
-\renewcommand{\algorithmiccomment}[1]{\hspace{1em} // #1}
-\floatname{algorithm}{Algorithme}
-\let\mylistof\listof
-\renewcommand\listof[2]{\mylistof{algorithm}{Liste des algorithmes}}
-% pour palier au problème de niveau des algos
-\makeatletter
-\providecommand*{\toclevel@algorithm}{0}
-\makeatother
+% Set theory
+\ProvideDocumentCommand{\given}{}{\mid}
+\DeclarePairedDelimiterX{\set}[1]{\{}{\}}{%
+  \RenewDocumentCommand{\given}{}{\mathrel{\delimsize\vert}}#1
+}
+\NewDocumentCommand{\card}{m}{\verticalbars*{#1}}
+
+\NewDocumentCommand{\kleene}{m}{{#1}^*}
+
+% Recursive functions theory
+\NewDocumentCommand{\zero}{}{\mathbf{0}()}
+\NewDocumentCommand{\const}{m}{\mathbf{#1}()}
+\NewDocumentCommand{\successor}{m}{\sigma\parentheses*{#1}}
+\NewDocumentCommand{\proj}{mmm}{\pi_{#1}^{#2}\parentheses*{#3}}
+
+% Computability
+\NewDocumentCommand{\prog}{m}{\mathtt{#1}}
+\NewDocumentCommand{\sem}{m}{%
+  \textsc{sem}\ifthenelse{\isempty{#1}}{}{\parentheses*{\prog{#1}}}}
+\NewDocumentCommand{\reduction}{mmm}{%
+  #2 \preceq_c\ifthenelse{\isempty{#1}}{}{^{#1}} #3}
+\NewDocumentCommand{\st}{}{\text{~s.t.\ }}
+\NewDocumentCommand{\deduce}{}{\vdash}
 
 \endinput
