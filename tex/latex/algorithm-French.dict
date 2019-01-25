@@ -1,19 +1,19 @@
 \ProvidesDictionary{algorithm}{French}
 
-\providetranslation[to = French]{Algorithm}{Algorithme}
-\providetranslation[to = French]{do}{faire}
-\providetranslation[to = French]{end}{fin}
-\providetranslation[to = French]{for}{pour}
-\providetranslation[to = French]{all}{tout}
-\providetranslation[to = French]{while}{tant que}
-\providetranslation[to = French]{repeat}{répéter}
-\providetranslation[to = French]{until}{jusqu'à}
-\providetranslation[to = French]{if}{si}
-\providetranslation[to = French]{then}{alors}
-\providetranslation[to = French]{else}{sinon}
-\providetranslation[to = French]{procedure}{procédure}
-\providetranslation[to = French]{function}{fonction}
-\providetranslation[to = French]{loop}{boucler}
-\providetranslation[to = French]{Require}{Pré-conditions}
-\providetranslation[to = French]{Ensure}{Post-conditions}
-\providetranslation[to = French]{return}{renvoyer}
+\providetranslation{Algorithm}{Algorithme}
+\providetranslation{do}{faire}
+\providetranslation{end}{fin}
+\providetranslation{for}{pour}
+\providetranslation{all}{tout}
+\providetranslation{while}{tant que}
+\providetranslation{repeat}{répéter}
+\providetranslation{until}{jusqu'à}
+\providetranslation{if}{si}
+\providetranslation{then}{alors}
+\providetranslation{else}{sinon}
+\providetranslation{procedure}{procédure}
+\providetranslation{function}{fonction}
+\providetranslation{loop}{boucler}
+\providetranslation{Require}{Pré-conditions}
+\providetranslation{Ensure}{Post-conditions}
+\providetranslation{return}{renvoyer}
