@@ -1,0 +1,9 @@
+\ProvidesDictionary{maths}{French}
+
+\providetranslation{Theorem}{Théorème}
+\providetranslation{Corollary}{Corollaire}
+\providetranslation{Lemma}{Lemme}
+\providetranslation{Definition}{Définition}
+\providetranslation{Example}{Exemple}
+\providetranslation{Remark}{Remarque}
+\providetranslation{Notation}{Notation}

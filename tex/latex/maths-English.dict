@@ -1,0 +1,9 @@
+\ProvidesDictionary{maths}{English}
+
+\providetranslation{Theorem}{Theorem}
+\providetranslation{Corollary}{Corollary}
+\providetranslation{Lemma}{Lemma}
+\providetranslation{Definition}{Definition}
+\providetranslation{Example}{Example}
+\providetranslation{Remark}{Remark}
+\providetranslation{Notation}{Notation}
