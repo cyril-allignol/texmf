@@ -1,16 +1,17 @@
 \ProvidesPackage{compilers}
 
 \RequirePackage{xparse}
+\RequirePackage{mathtools}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Formal languages commands
 
-\newcommand*{\emptyword}{\Lambda}
-\newcommand*{\length}[1]{\left|#1\right|}
-\newcommand*{\concat}{\bullet}
-\newcommand*{\epstrans}{\varepsilon}
-\newcommand*{\efermeture}{$\epstrans$-fermeture}
-\NewDocumentCommand{\trans}{s}{\vdash\IfBooleanT{#1}{^*}}
+\DeclarePairedDelimiter{\length}{\lvert}{\rvert}
+\NewDocumentCommand{\emptyword}{}{\Lambda}
+\NewDocumentCommand{\concat}{}{\mathbin{\bullet}}
+\NewDocumentCommand{\epstrans}{}{\varepsilon}
+\NewDocumentCommand{\efermeture}{}{$\epstrans$-fermeture}
+\NewDocumentCommand{\trans}{s}{\mathrel{\vdash\IfBooleanT{#1}{^*}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Typeset derivation trees
@@ -25,13 +26,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Custom grammar commands
 
-\newcommand*{\token}[1]{$\langle$#1$\rangle$}
-\newcommand*{\pointer}[1]{$\stackrel{\text{\tiny#1}}{\longrightarrow}$}
+\DeclarePairedDelimiter{\token}{\langle}{\rangle}
+\NewDocumentCommand{\pointer}{m}{\stackrel{\text{\tiny #1}}{\longrightarrow}}
 \NewDocumentCommand{\derivesymbol}{}{\Rightarrow}
 \NewDocumentCommand{\derive}{so}{%
-  \IfBooleanTF{#1}{\stackrel{*}{\derivesymbol}}%
-  {\IfValueTF{#2}{\stackrel{\scriptsize #2}{\derivesymbol}}%
-    {\derivesymbol}}
+  \mathrel{%
+    \IfBooleanTF{#1}{\stackrel{*}{\derivesymbol}}%
+    {\IfValueTF{#2}{\stackrel{\scriptsize #2}{\derivesymbol}}%
+      {\derivesymbol}}%
+  }
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,7 +104,7 @@ fill = white, inner sep = 1pt]
 \newlength{\s}
 \setlength{\s}{1.8em}
 
-\newcommand{\Tcompiler}[3]{
+\NewDocumentCommand{\Tcompiler}{mmm}{%
   \coordinate (O);
   \draw[thick] (O) ++(-1.5\s, 0.5\s) -- ++(3\s, 0) -- ++(0, -\s) --
   ++(-\s, 0) -- ++(0, -\s) -- ++(-\s, 0) -- ++(0, \s) -- ++(-\s, 0) -- cycle;
@@ -110,27 +113,27 @@ fill = white, inner sep = 1pt]
   \node at ($ (O) + (0, -\s) $) {#3};
 }
 
-\newcommand{\Tmachine}[1]{
+\NewDocumentCommand{\Tmachine}{m}{%
   \coordinate (O);
   \node at ($ (O) + (0, 0.15\s) $) {#1};
   \draw[thick] (O) ++(-0.75\s, 0.5\s) -- ++(1.5\s,0) -- ++(-0.75\s,-\s) -- cycle;
 }
 
-\newcommand{\Tvm}[2]{
+\NewDocumentCommand{\Tvm}{mm}{%
   \node (O) {#2};
   \node at ($ (O) + (0, \s) $) {#1};
   \draw[thick] (O) ++(-0.5\s, 1.5\s) -- ++(\s, 0) -- ++(0, -2\s) --
   ++(-\s, 0) -- cycle;
 }
 
-\newcommand{\Tprogram}[2]{
+\NewDocumentCommand{\Tprogram}{mm}{%
   \node (O) {#2};
   \node at ($ (O) + (0, 0.8\s) $) {#1};
   \draw[thick] (O) ++(-0.5\s, 1.5\s) arc (-120:-60:\s) -- ++(0, -2\s) --
   ++(-\s, 0) -- cycle;
 }
 
-\newcommand{\Tdata}[1]{
+\NewDocumentCommand{\Tdata}{m}{%
   \node (O) {#1};
   \draw[thick] (O) ++(-0.5\s, -0.5\s) arc (-120:-60:\s) -- ++(0, \s) --
   ++(-\s, 0) -- cycle;
