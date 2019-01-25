@@ -1,0 +1,33 @@
+\ProvidesPackage{algtranslate}
+
+\RequirePackage[boxed]{algorithm}
+\RequirePackage[noend]{algpseudocode}
+\RequirePackage{translator}
+
+\usedictionary{algorithm}
+
+\floatname{algorithm}{\translate{Algorithm}}
+
+\algrenewcommand\algorithmicdo{\textbf{\translate{do}}}
+\algrenewcommand\algorithmicend{\textbf{\translate{end}}}
+\algrenewcommand\algorithmicforall{\textbf{\translate{for} \translate{all}}}
+\algrenewcommand\algorithmicwhile{\textbf{\translate{while}}}
+\algrenewcommand\algorithmicrepeat{\textbf{\translate{repeat}}}
+\algrenewcommand\algorithmicuntil{\textbf{\translate{until}}}
+\algrenewcommand\algorithmicif{\textbf{\translate{if}}}
+\algrenewcommand\algorithmicthen{\textbf{\translate{then}}}
+\algrenewcommand\algorithmicelse{\textbf{\translate{else}}}
+\algrenewcommand\algorithmicprocedure{\textbf{\translate{procedure}}}
+\algrenewcommand\algorithmicfunction{\textbf{\translate{function}}}
+\algrenewcommand\algorithmicloop{\textbf{\translate{loop}}}
+\algrenewcommand\algorithmicrequire{\textbf{\translate{require}}}
+\algrenewcommand\algorithmicensure{\textbf{\translate{ensure}}}
+\algrenewcommand\algorithmicreturn{\textbf{\translate{return}}}
+
+% \let\mylistof\listof
+% \renewcommand\listof[2]{\mylistof{algorithm}{Liste des algorithmes}}
+% \makeatletter
+% \providecommand*{\toclevel@algorithm}{0}
+% \makeatother
+
+\endinput
