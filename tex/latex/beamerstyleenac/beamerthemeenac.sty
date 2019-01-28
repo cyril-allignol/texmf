@@ -1,0 +1,290 @@
+\mode<presentation>
+
+% Use alternative title page style.
+\DeclareOptionBeamer{alternativetitlepage}[true]{\def\beamer@fancy@alternativetitlepage{#1}}
+
+% Logo to use in the alternative title page.
+\def\beamer@fancy@titlepagelogo{}
+\DeclareOptionBeamer{titlepagelogo}{\def\beamer@fancy@titlepagelogo{#1}}
+
+% Bullet shape.
+\DeclareOptionBeamer{bullet}{\def\beamer@fancy@bullet{#1}}
+
+\ExecuteOptionsBeamer{alternativetitlepage=true,bullet=square}
+
+\ProcessOptionsBeamer
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{bibliography item}[text]
+
+% Colors.
+\definecolor{primary_cyan}{HTML}{009FE3}
+\definecolor{primary_blue}{HTML}{002F87}
+\definecolor{primary_black}{HTML}{1D1D1D}
+\definecolor{primary_lightgray}{HTML}{DADADA}
+\definecolor{primary_gray}{HTML}{3C3C3B}
+\definecolor{secondary_orange}{HTML}{FF8A00}
+\definecolor{secondary_red}{HTML}{E90000}
+\definecolor{secondary_green}{HTML}{078B01}
+\definecolor{secondary_blue}{HTML}{213478}
+\definecolor{secondary_magenta}{HTML}{E6007E}
+\definecolor{secondary_purple}{HTML}{92009F}
+\definecolor{secondary_anis}{HTML}{DEDC00}
+
+%\setbeamercolor{structure}{fg = white, bg = primary_cyan}
+\setbeamercolor{structure}{fg = primary_cyan}
+
+%\setbeamercolor{item}{fg = primary_cyan}
+\setbeamercolor{section in toc}{parent = normal text}
+
+\setbeamercolor{normal text}{fg = primary_gray}
+%\setbeamercolor{alerted text}{fg = secondary_orange}
+\setbeamercolor{alerted text}{fg = secondary_red}
+\setbeamercolor{alerted structure}{bg = secondary_orange, fg = white}
+\setbeamercolor{example text}{fg = secondary_green}
+\setbeamercolor{example structure}{bg = secondary_green, fg = white}
+
+\setbeamercolor{palette primary}{fg = white, bg = primary_cyan}
+\setbeamercolor{palette secondary}{fg = primary_lightgray, bg = primary_cyan}
+\setbeamercolor{palette tertiary}{fg = white, bg = primary_cyan}
+\setbeamercolor{palette quaternary}{parent = structure}
+
+% \setbeamercolor{palette sidebar primary}{}
+% \setbeamercolor{palette sidebar secondary}{}
+% \setbeamercolor{palette sidebar tertiary}{}
+% \setbeamercolor{palette sidebar quaternary}{}
+
+%\setbeamercolor{block title}{bg = cblue, fg = white}
+\setbeamercolor{block title}{bg = primary_lightgray, fg = primary_cyan}
+\setbeamercolor{block body}{bg = primary_lightgray}
+\setbeamercolor{block title alerted}{bg = secondary_orange, fg = white}
+\setbeamercolor{block body alerted}{bg = primary_lightgray}
+\setbeamercolor{block title example}{bg = primary_lightgray}
+\setbeamercolor{block body example}{bg = primary_lightgray}
+
+\setbeamercolor*{lineup}{bg = primary_gray}
+\setbeamercolor*{linemid}{bg = secondary_anis}
+%\setbeamercolor*{linebottom}{bg = primary_lightgray}
+\setbeamercolor*{linebottom}{bg = secondary_orange}
+\setbeamercolor*{title page header}{parent = palette primary}
+\setbeamercolor{author in head/foot}{fg = white, bg = primary_gray}
+\setbeamercolor{title in head/foot}{fg = white, bg = primary_gray}
+\setbeamercolor{date in head/foot}{fg = white, bg = primary_gray}
+\setbeamercolor*{section in head/foot}{fg = white, bg = primary_black}
+\setbeamercolor*{subsection in head/foot}{fg = white, bg = primary_gray}
+\setbeamercolor{frametitle}{parent = structure}
+\setbeamercolor{title}{fg = white, bg = primary_cyan}
+
+% Lengths.
+\newlength{\beamer@fancy@lineup}
+\setlength{\beamer@fancy@lineup}{.025\paperheight}
+\newlength{\beamer@fancy@linemid}
+\setlength{\beamer@fancy@linemid}{.015\paperheight}
+\newlength{\beamer@fancy@linebottom}
+\setlength{\beamer@fancy@linebottom}{.01\paperheight}
+
+\newlength{\beamer@fancy@linesub}
+\setlength{\beamer@fancy@linebottom}{.01\paperheight}
+
+% Margins.
+\newlength{\beamer@fancy@normalmargin}
+\setlength{\beamer@fancy@normalmargin}{.06\paperwidth}
+\setbeamersize{text margin left=\beamer@fancy@normalmargin}
+\setbeamersize{text margin right=\beamer@fancy@normalmargin}
+\setlength\leftmargini{.6\beamer@fancy@normalmargin}
+\setlength\leftmarginii{.6\beamer@fancy@normalmargin}
+\setlength\leftmarginiii{.6\beamer@fancy@normalmargin}
+
+% Normal title page.
+\defbeamertemplate*{title page normal}{fancy theme}[1][]
+{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,center,#1]{title page header}
+      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{centering}
+  \vfill
+}
+
+% Alternative title page, you should use this in a frame with the [plain]
+% option.
+\defbeamertemplate*{title page alternative}{fancy theme}[1][]
+{
+  {\parskip0pt\offinterlineskip%
+    \hbox{\hskip-\Gm@lmargin\hbox{\vbox{%
+          \@tempdima=\textwidth\textwidth=\paperwidth\hsize=\textwidth\def\\{,}\vbox{}\vskip-3.7ex%
+          % Title.
+          \begin{beamercolorbox}[wd=\paperwidth,ht=.4\paperheight,center,#1]{title page header}
+            \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par%
+            \vspace{.125\paperheight}%
+          \end{beamercolorbox}%
+          % Subtitle
+          \begin{tikzpicture}[remember picture,overlay]
+            \def\dh{-0.075*\paperheight}
+            \def\dx{0.71*\paperwidth}
+            \def\dy{0.12*\paperheight}
+            \def\dxx{0.75*\paperwidth}
+            \draw[color = primary_black, fill = primary_gray]
+            (\paperwidth, \dh) -- ++(0, \dy)
+            -- ++(-\dxx, 0) -- ++(\dxx-\dx, -\dy) -- cycle;
+            \node[anchor = east, text width = 0.95*\dx] at
+            (\textwidth, \dh+0.5*\dy)
+            {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par};
+          \end{tikzpicture}%
+          \vbox{}\vskip0ex%
+          \vskip0pt%
+        }}%
+      \hskip-\Gm@rmargin%
+    }}\hfil%
+  %
+  \begin{columns}
+    % \ifx\beamer@fancy@titlepagelogo\@empty%
+    % \column{\textwidth}
+    % \else
+    \column{.35\textwidth}
+    % Logo.
+    \begin{centering}
+      \vbox{}\vfill
+      \includegraphics[height=.25\paperheight]{resources/enac-darkgray}
+      \vfill
+    \end{centering}
+    \column{.65\textwidth}
+    % \fi
+    % Authors, institute and date
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
+      \usebeamerfont{institute}\insertinstitute
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{columns}
+}
+
+\defbeamertemplate*{title page}{fancy}[1][]
+{
+  \def\beamer@fancy@truetext{true}%
+  \ifx\beamer@fancy@alternativetitlepage\beamer@fancy@truetext%
+    \usebeamertemplate{title page alternative}%
+  \else%
+    \usebeamertemplate{title page normal}%
+  \fi%
+}
+
+% Items.
+\defbeamertemplate{itemize item}{squarealt}%
+{\tiny\raise.5ex\hbox{\donotcoloroutermaths$\blacksquare$}}
+\defbeamertemplate{itemize subitem}{squarealt}%
+{\tiny\raise.4ex\hbox{\donotcoloroutermaths$\square$}}
+\defbeamertemplate{itemize subsubitem}{squarealt}%
+{\tiny\raise.3ex\hbox{\donotcoloroutermaths$\blacksquare$}}
+
+\defbeamertemplate{itemize item}{circlealt}%
+{\small\raise.2ex\hbox{\donotcoloroutermaths$\bullet$}}
+\defbeamertemplate{itemize subitem}{circlealt}%
+{\small\raise.1ex\hbox{\donotcoloroutermaths$\circ$}}
+\defbeamertemplate{itemize subsubitem}{circlealt}%
+{\scriptsize\raise.1ex\hbox{\donotcoloroutermaths$\bullet$}}
+
+\def\circletext{circle}
+\ifx\beamer@fancy@bullet\circletext
+  \setbeamertemplate{items}[circlealt]
+\else
+  \setbeamertemplate{items}[squarealt]
+\fi
+
+\defbeamertemplate*{footline}{infolines theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\beamer@ifempty\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \hspace{-0.001\paperwidth}%
+  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \hspace{-0.001\paperwidth}%
+  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    %\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+  \begin{tikzpicture}[remember picture,overlay]
+    \def\dx{0.6cm}
+    \def\dy{2*\dx/1.5}
+    \def\dxx{2.3*\dx/1.5}
+    \draw[color = primary_cyan, fill = primary_cyan]
+    (current page.south east) -- ++(0, \dy)
+    -- ++(-\dxx, 0) -- ++(\dxx-\dx, -\dy) -- cycle;
+    \node[anchor = south east, yshift = 4.5ex] at (current page.south east)
+    {\resizebox{0.7cm}{!}{\color{white}\textbf{www.enac.fr}}};
+  \end{tikzpicture}%
+}
+
+\defbeamertemplate*{headline}{}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2ex,dp=.5ex,right]{section in head/foot}%
+    \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.41\paperwidth,ht=2ex,dp=.5ex,left]{subsection in head/foot}%
+    \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertsubsectionhead
+  \end{beamercolorbox}%
+  \hspace{-0.01\paperwidth}%
+  \begin{beamercolorbox}[wd=.1\paperwidth,ht=2ex,dp=.5ex,left]{subsection in head/foot}%
+    \usebeamerfont{subsection in head/foot}\hspace*{2ex}
+    \hfill\insertframenumber{} / \inserttotalframenumber
+  \end{beamercolorbox}}%
+  \vskip0pt%
+  \begin{tikzpicture}[remember picture,overlay]
+    \def\dx{1.25cm}
+    \def\dy{3.5*\dx/3}
+    \def\dxx{4.3*\dx/3}
+    \draw[color = primary_cyan, fill = primary_cyan]
+    (current page.north west) -- ++(0, -\dy)
+    -- ++(\dxx, 0) -- ++(\dx-\dxx, \dy) -- cycle;
+    \node[anchor = north west, yshift = -8pt] at (current page.north west)
+    {\includegraphics[width = \dx]{resources/enac-white}};
+  \end{tikzpicture}%
+}
+
+\setbeamersize{text margin left = 1em, text margin right = 1em}
+\addtobeamertemplate{block begin}{}{\vspace{-1ex}}
+% \addtobeamertemplate{block alerted begin}{}{\vspace{-1ex}}
+\addtobeamertemplate{block example begin}{}{\vspace{-1ex}}
+
+\setbeamertemplate{frametitle}[default][left, leftskip = 1.6cm]
+\addtobeamertemplate{frametitle}{\vspace{-0.4ex}}{}%
+
+\useinnertheme{rectangles}
+\usefonttheme{professionalfonts}
+\usepackage{arev} %font
+
+\mode
+<all>
+
+\endinput
