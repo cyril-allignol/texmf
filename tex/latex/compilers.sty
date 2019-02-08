@@ -2,6 +2,7 @@
 
 \RequirePackage{xparse}
 \RequirePackage{mathtools}
+\RequirePackage{maths}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Formal languages commands
@@ -12,6 +13,8 @@
 \NewDocumentCommand{\epstrans}{}{\varepsilon}
 \NewDocumentCommand{\efermeture}{}{$\epstrans$-fermeture}
 \NewDocumentCommand{\trans}{s}{\mathrel{\vdash\IfBooleanT{#1}{^*}}}
+\NewDocumentCommand{\setquotient}{mm}{{#1}^{-1}#2}
+\NewDocumentCommand{\derivative}{mm}{D_{#1}\parentheses{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Typeset derivation trees
@@ -40,9 +43,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Custom compilation commands
 
-\NewDocumentCommand\first{o}{\textsc{first}\IfValueT{#1}{(#1)}}
-\NewDocumentCommand\last{o}{\textsc{last}\IfValueT{#1}{(#1)}}
-\NewDocumentCommand\follow{o}{\textsc{follow}\IfValueT{#1}{(#1)}}
+\NewDocumentCommand{\first}{o}{\textsc{first}\IfValueT{#1}{(#1)}}
+\NewDocumentCommand{\last}{o}{\textsc{last}\IfValueT{#1}{(#1)}}
+\NewDocumentCommand{\follow}{o}{\textsc{follow}\IfValueT{#1}{(#1)}}
 
 \RequirePackage{tikz}
 \usetikzlibrary{calc, arrows, shapes, positioning, automata}
