@@ -13,14 +13,22 @@
 \makeatletter
 \@ifclassloaded{beamer}{%
 }{%
-  \theoremstyle{plain}
+  \declaretheoremstyle[%
+  shaded = {bgcolor = lightgray!50},
+  % shaded = {rulecolor = lightgray, rulewidth = 1pt, bgcolor = white},
+  notefont = \normalfont\bfseries,
+  notebraces = {\--- }{},
+  ]{thmstyle}
   \declaretheorem[
-  name = \translate{Theorem},
+  style = thmstyle,
   numberwithin = chapter,
-  shaded = {bgcolor = lightgray}
-  ]{theorem}
-  \declaretheorem[name = \translate{Corollary}, sibling = theorem]{corollary}
-  \declaretheorem[name = \translate{Lemma}, sibling = theorem]{lemma}
+  name = \translate{Theorem}]{theorem}
+  \declaretheorem[
+  style = thmstyle,
+  name = \translate{Corollary}, sibling = theorem]{corollary}
+  \declaretheorem[
+  style = thmstyle,
+  name = \translate{Lemma}, sibling = theorem]{lemma}
 
   \theoremstyle{definition}
   \declaretheorem[name = \translate{Definition}, sibling = theorem]{definition}
