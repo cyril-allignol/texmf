@@ -5,7 +5,7 @@
 \PassOptionsToPackage{fleqn}{amsmath}
 
 \RequirePackage[showlanguages]{babel}
-\newcommand*{\foreign}[2][english]{\textit{\foreignlanguage{#1}{#2}}}
+\NewDocumentCommand{\foreign}{O{english}m}{\textit{\foreignlanguage{#1}{#2}}}
 
 \RequirePackage[final, babel]{microtype}
 
@@ -37,9 +37,9 @@
 \RequirePackage{algtranslate}
 
 % Misc. commands
-\newcommand*{\eg}{\textit{e.g.\@}}
-\newcommand*{\ie}{\textit{i.e.\@}}
-\newcommand*{\circled}[1]{%
+\NewDocumentCommand{\eg}{}{\textit{e.g.\@}}
+\NewDocumentCommand{\ie}{}{\textit{i.e.\@}}
+\NewDocumentCommand{\circled}{m}{%
   \tikz[baseline = (char.base)]{%
     \node[shape = circle, draw, inner sep = 0.05em] (char) {#1};}}
 
@@ -53,6 +53,6 @@
 }
 \makeatother
 
-\newcommand*{\email}[1]{\href{mailto:#1}{\nolinkurl{#1}}}
+\NewDocumentCommand{\email}{m}{\href{mailto:#1}{\nolinkurl{#1}}}
 
 \endinput
