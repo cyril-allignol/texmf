@@ -77,6 +77,9 @@ fill = white, inner sep = 1pt]
 %%%%%%%%%%%%%%%%%%%%%
 %% Customize automata
 
+\NewDocumentCommand{\defaultautomata}{}{\tuple{Q, \Sigma, \delta, s, F}}
+\NewDocumentCommand{\configuration}{m}{\tuple{#1}}
+
 % #1, #2: vertical and horizontal node separation
 \newenvironment{automaton}[2]{%
   \begin{tikzpicture}[auto,
