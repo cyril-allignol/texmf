@@ -5,7 +5,9 @@
 \RequirePackage{thmtools}
 \RequirePackage{xifthen}
 \RequirePackage{xparse}
-\RequirePackage{mathtools}
+
+\RequirePackage{delimiters}
+\RequirePackage{set_theory}
 
 \usedictionary{maths}
 
@@ -40,13 +42,6 @@
 }
 \makeatother
 
-% A few paired delimiters
-\DeclarePairedDelimiter{\parentheses}{\lparen}{\rparen}
-\DeclarePairedDelimiter{\squarebrackets}{\lbrack}{\rbrack}
-\DeclarePairedDelimiter{\curlybrackets}{\{}{\}}
-\DeclarePairedDelimiter{\angles}{\langle}{\rangle}
-\DeclarePairedDelimiter{\verticalbars}{\lvert}{\rvert}
-
 % Numbers
 \NewDocumentCommand{\B}{}{\mathbb{B}} % booleans
 \NewDocumentCommand{\N}{}{\mathbb{N}} % natural number
@@ -60,13 +55,6 @@
 \NewDocumentCommand{\fun}{m}{\mathrm{#1}}
 \NewDocumentCommand{\function}{omm}{%
   \IfValueTF{#1}{\fun{#1}:}{}#2 \longrightarrow #3}
-
-% Set theory
-\ProvideDocumentCommand{\given}{}{\mid}
-\DeclarePairedDelimiterX{\set}[1]{\{}{\}}{%
-  \RenewDocumentCommand{\given}{}{\mathrel{\delimsize\vert}}#1
-}
-\NewDocumentCommand{\card}{m}{\verticalbars*{#1}}
 
 \NewDocumentCommand{\kleene}{m}{{#1}^*}
 

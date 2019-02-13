@@ -1,0 +1,26 @@
+\ProvidesPackage{set_theory}
+
+\RequirePackage{amsmath}
+\RequirePackage{xparse}
+\RequirePackage{mathtools}
+\RequirePackage{delimiters}
+
+% Set theory
+\ProvideDocumentCommand{\given}{}{\mid}
+\DeclarePairedDelimiterX{\set}[1]{\{}{\}}{%
+  \RenewDocumentCommand{\given}{}{\mathrel{\delimsize\vert}}#1
+}
+\NewDocumentCommand{\card}{m}{\verticalbars*{#1}}
+
+\NewDocumentCommand{\setunion}{}{\cup}
+\NewDocumentCommand{\setinter}{}{\cap}
+\NewDocumentCommand{\setdiff}{}{\setminus}
+\NewDocumentCommand{\setcompl}{m}{\overline{#1}}
+\NewDocumentCommand{\bigunion}{}{\bigcup}
+\NewDocumentCommand{\biginter}{}{\bigcap}
+
+\NewDocumentCommand{\fullset}{m}{\mathbf{#1}}
+
+\NewDocumentCommand{\powerset}{m}{\mathcal{P}\parentheses*{#1}}
+
+\endinput
