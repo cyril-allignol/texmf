@@ -16,10 +16,6 @@
 \NewDocumentCommand{\setquotient}{mm}{{#1}^{-1}#2}
 \NewDocumentCommand{\derivative}{mm}{D_{#1}\parentheses{#2}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Typeset derivation trees
-
-\RequirePackage{synttree}
 
 %%%%%%%%%%%%%%%%%%%
 %% Typeset grammars
@@ -110,39 +106,50 @@ fill = white, inner sep = 1pt]
 \newlength{\s}
 \setlength{\s}{1.8em}
 
-\NewDocumentCommand{\Tcompiler}{mmm}{%
-  \coordinate (O);
-  \draw[thick] (O) ++(-1.5\s, 0.5\s) -- ++(3\s, 0) -- ++(0, -\s) --
-  ++(-\s, 0) -- ++(0, -\s) -- ++(-\s, 0) -- ++(0, \s) -- ++(-\s, 0) -- cycle;
-  \node at ($ (O) + (-\s, 0) $) {#1};
-  \node at ($ (O) + (\s, 0) $) {#2};
-  \node at ($ (O) + (0, -\s) $) {#3};
+\NewDocumentCommand{\Tcompiler}{O{0em}O{0em}mmm}{%
+  \begin{scope}[shift = {(#1, #2)}]
+    \coordinate (O);
+    \draw[thick] (O) ++(-1.5\s, 0.5\s) -- ++(3\s, 0) -- ++(0, -\s) --
+    ++(-\s, 0) -- ++(0, -\s) -- ++(-\s, 0) -- ++(0, \s) -- ++(-\s, 0) -- cycle;
+    \node at ($ (O) + (-\s, 0) $) {#3};
+    \node at ($ (O) + (\s, 0) $) {#4};
+    \node at ($ (O) + (0, -\s) $) {#5};
+  \end{scope}
 }
 
-\NewDocumentCommand{\Tmachine}{m}{%
-  \coordinate (O);
-  \node at ($ (O) + (0, 0.15\s) $) {#1};
-  \draw[thick] (O) ++(-0.75\s, 0.5\s) -- ++(1.5\s,0) -- ++(-0.75\s,-\s) -- cycle;
+\NewDocumentCommand{\Tmachine}{O{0em}O{0em}m}{%
+  \begin{scope}[shift = {(#1, #2)}]
+    \coordinate (O);
+    \node at ($ (O) + (0, 0.15\s) $) {#3};
+    \draw[thick] (O) ++(-0.75\s, 0.5\s) -- ++(1.5\s,0) --
+    ++(-0.75\s,-\s) -- cycle;
+  \end{scope}
 }
 
-\NewDocumentCommand{\Tvm}{mm}{%
-  \node (O) {#2};
-  \node at ($ (O) + (0, \s) $) {#1};
-  \draw[thick] (O) ++(-0.5\s, 1.5\s) -- ++(\s, 0) -- ++(0, -2\s) --
-  ++(-\s, 0) -- cycle;
+\NewDocumentCommand{\Tvm}{O{0em}O{0em}mm}{%
+  \begin{scope}[shift = {(#1, #2)}]
+    \node (O) {#4};
+    \node at ($ (O) + (0, \s) $) {#3};
+    \draw[thick] (O) ++(-0.5\s, 1.5\s) -- ++(\s, 0) -- ++(0, -2\s) --
+    ++(-\s, 0) -- cycle;
+  \end{scope}
 }
 
-\NewDocumentCommand{\Tprogram}{mm}{%
-  \node (O) {#2};
-  \node at ($ (O) + (0, 0.8\s) $) {#1};
-  \draw[thick] (O) ++(-0.5\s, 1.5\s) arc (-120:-60:\s) -- ++(0, -2\s) --
-  ++(-\s, 0) -- cycle;
+\NewDocumentCommand{\Tprogram}{O{0em}O{0em}mm}{%
+  \begin{scope}[shift = {(#1, #2)}]
+    \node (O) {#4};
+    \node at ($ (O) + (0, 0.8\s) $) {#3};
+    \draw[thick] (O) ++(-0.5\s, 1.5\s) arc (-120:-60:\s) -- ++(0, -2\s) --
+    ++(-\s, 0) -- cycle;
+  \end{scope}
 }
 
-\NewDocumentCommand{\Tdata}{m}{%
-  \node (O) {#1};
-  \draw[thick] (O) ++(-0.5\s, -0.5\s) arc (-120:-60:\s) -- ++(0, \s) --
-  ++(-\s, 0) -- cycle;
+\NewDocumentCommand{\Tdata}{O{0em}O{0em}m}{%
+  \begin{scope}[shift = {(#1, #2)}]
+    \node (O) {#3};
+    \draw[thick] (O) ++(-0.5\s, -0.5\s) arc (-120:-60:\s) -- ++(0, \s) --
+    ++(-\s, 0) -- cycle;
+  \end{scope}
 }
 
 \endinput
