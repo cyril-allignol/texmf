@@ -14,6 +14,13 @@
 % Theorem-like environments
 \makeatletter
 \@ifclassloaded{beamer}{%
+  \NewDocumentEnvironment{exercise}{o}{%
+    \begin{block}{\translate{Exercise}\IfValueT{#1}{ --- #1}}}{%
+    \end{block}}
+  \NewDocumentEnvironment{remark}{}{%
+    \begin{flushright}\begin{minipage}{0.85\textwidth}%
+        \scriptsize\structure{Rem.}}{%
+        \hfill$\circ$\normalsize\end{minipage}\end{flushright}}
 }{%
   \declaretheoremstyle[%
   shaded = {bgcolor = lightgray!50},
