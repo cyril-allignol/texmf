@@ -6,24 +6,32 @@
 \RequirePackage{xparse}
 \RequirePackage{xifthen}
 \RequirePackage{xstring}
+\RequirePackage{synttree}
 
+% \newif\if@classic
+% \@classicfalse
+% \DeclareOption{classic}{\@classictrue}
+% \ProcessOptions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NewDocumentCommand{\bnfntfont}{}{\itshape}
-\NewDocumentCommand{\bnfntleft}{}{$\langle$}
-\NewDocumentCommand{\bnfntright}{}{$\rangle$}
 \NewDocumentCommand{\bnftsfont}{}{\bfseries\ttfamily}
-\NewDocumentCommand{\bnftsleft}{}{`}
-\NewDocumentCommand{\bnftsright}{}{'}
-\NewDocumentCommand{\productionop}{}{\mathrel{\Coloneqq}}
 \NewDocumentCommand{\altop}{}{\mathrel{|}}
+\NewDocumentCommand{\bnfntleft}{}{}
+\NewDocumentCommand{\bnfntright}{}{}
+\NewDocumentCommand{\bnftsleft}{}{}
+\NewDocumentCommand{\bnftsright}{}{}
+\NewDocumentCommand{\productionop}{}{\mathrel{\rightarrow}}
+% \if@classic
+%   \RenewDocumentCommand{\bnfntleft}{}{$\langle$}
+%   \RenewDocumentCommand{\bnfntright}{}{$\rangle$}
+%   \RenewDocumentCommand{\bnftsleft}{}{`}
+%   \RenewDocumentCommand{\bnftsright}{}{'}
+%   \RenewDocumentCommand{\productionop}{}{\mathrel{\Coloneqq}}
+% \fi
 
-\NewDocumentCommand{\bnfnt}{sm}{%
-  \text{\IfBooleanTF{#1}{}{\bnfntleft}%
-    {\bnfntfont#2}%
-    \IfBooleanTF{#1}{}{\bnfntright}}}
-\NewDocumentCommand{\bnfts}{sm}{%
-  \text{\IfBooleanTF{#1}{}{\bnftsleft}%
-    {\bnftsfont#2}%
-    \IfBooleanTF{#1}{}{\bnftsright}}}
+\NewDocumentCommand{\bnfnt}{m}{\text{\bnfntleft{\bnfntfont#1}\bnfntright}}
+\NewDocumentCommand{\bnfts}{m}{\text{\bnftsleft{\bnftsfont#1}\bnftsright}}
 
 \newboolean{numrules}\setboolean{numrules}{false}
 \newboolean{inline}\setboolean{inline}{false}
@@ -42,6 +50,13 @@
 \catcode`< = \active%
 \catcode`" = \active%
 \catcode`| = \active%
+\gdef\inlinerule{
+  \catcode`< = \active%
+  \catcode`" = \active%
+  \catcode`| = \active%
+  \def|={$\productionop$}%
+  \def|{$\altop$}
+}
 \gdef\prod#1|={%
   \savebox{\rulelabel}{$#1 \productionop$}%
   \ifthenelse{\boolean{inline}}%
@@ -65,26 +80,19 @@
 \NewDocumentEnvironment{inlinegrammar}{}
 {\setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar}{}
 
-\NewDocumentEnvironment{grammar}{sO{default}}{%
-  % \setboolean{inlinerules}{true}%
+% \NewDocumentCommand{\inlinerule}{m}{%
+%   \setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar%
+%   #1}
+\NewDocumentCommand{\lritem}{m}{%
+  \setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar%
+  #1}
+
+\NewDocumentEnvironment{grammar}{so}{%
+  \IfValueT{#2}{%
+    \IfStrEq{#2}{inlinerules}{\setboolean{inlinerules}{true}}{}%
+  }
   \setcounter{ruleno}{0}%
   \setboolean{numrules}{\IfBooleanTF{#1}{false}{true}}%
-  \IfStrEqCase{#2}{%
-    {default}{%
-      \RenewDocumentCommand{\bnfntleft}{}{$\langle$}
-      \RenewDocumentCommand{\bnfntright}{}{$\rangle$}
-      \RenewDocumentCommand{\bnftsleft}{}{}
-      \RenewDocumentCommand{\bnftsright}{}{}
-      \RenewDocumentCommand{\productionop}{}{\mathrel{\Coloneqq}}
-    }
-    {simple}{%
-      \RenewDocumentCommand{\bnfntleft}{}{}
-      \RenewDocumentCommand{\bnfntright}{}{}
-      \RenewDocumentCommand{\bnftsleft}{}{}
-      \RenewDocumentCommand{\bnftsright}{}{}
-      \RenewDocumentCommand{\productionop}{}{\mathrel{\rightarrow}}
-    }
-  }
   \par\activategrammar%
   \list{}{%
     \setlength{\labelwidth}{\IfBooleanTF{#1}{\z@}{1em}}
@@ -95,7 +103,7 @@
     \setlength{\parsep}{\z@}
     \setlength{\itemsep}{\z@}
   }
-}{\endlist\par\relax}
+}{\endlist\par\relax\setboolean{inlinerules}{false}}
 
 %% Place the star at a more intuitive position
 \ExplSyntaxOn
