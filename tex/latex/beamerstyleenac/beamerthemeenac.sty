@@ -273,9 +273,15 @@
 }
 
 \setbeamersize{text margin left = 1em, text margin right = 1em}
-\addtobeamertemplate{block begin}{}{\vspace{-1ex}}
+\addtobeamertemplate{block begin}{%
+  \def\@listi{\leftmargin\leftmargini%
+    \topsep    0pt%
+    \parsep    0pt%
+    \itemsep   3pt plus 2pt minus 3pt}%
+  \partopsep 0pt%
+}{}%\vspace{-1ex}}
 % \addtobeamertemplate{block alerted begin}{}{\vspace{-1ex}}
-\addtobeamertemplate{block example begin}{}{\vspace{-1ex}}
+% \addtobeamertemplate{block example begin}{}{\vspace{-1ex}}
 
 \setbeamertemplate{frametitle}[default][left, leftskip = 1.6cm]
 \addtobeamertemplate{frametitle}{\vspace{-0.4ex}}{}%
