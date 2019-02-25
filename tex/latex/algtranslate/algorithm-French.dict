@@ -14,6 +14,6 @@
 \providetranslation{procedure}{procédure}
 \providetranslation{function}{fonction}
 \providetranslation{loop}{boucler}
-\providetranslation{require}{pré-conditions}
-\providetranslation{ensure}{post-conditions}
+\providetranslation{require}{entrées}
+\providetranslation{ensure}{sorties}
 \providetranslation{return}{renvoyer}
