@@ -1,17 +1,10 @@
 \mode<presentation>
 
-% Use alternative title page style.
-\DeclareOptionBeamer{alternativetitlepage}[true]{\def\beamer@fancy@alternativetitlepage{#1}}
-
-% Logo to use in the alternative title page.
-\def\beamer@fancy@titlepagelogo{}
-\DeclareOptionBeamer{titlepagelogo}{\def\beamer@fancy@titlepagelogo{#1}}
+\RequirePackage{tikz}
 
 % Bullet shape.
 \DeclareOptionBeamer{bullet}{\def\beamer@fancy@bullet{#1}}
-
-\ExecuteOptionsBeamer{alternativetitlepage=true,bullet=square}
-
+\ExecuteOptionsBeamer{bullet = square}
 \ProcessOptionsBeamer
 
 \setbeamertemplate{navigation symbols}{}
@@ -95,70 +88,30 @@
 \setlength\leftmarginii{.6\beamer@fancy@normalmargin}
 \setlength\leftmarginiii{.6\beamer@fancy@normalmargin}
 
-% Normal title page.
-\defbeamertemplate*{title page normal}{fancy theme}[1][]
+% Title page, you should use this in a frame with the [plain] option.
+\defbeamertemplate*{title page}{fancy}[1][]
 {
-  \vbox{}
-  \vfill
-  \begin{centering}
-    \begin{beamercolorbox}[wd=\paperwidth,sep=8pt,center,#1]{title page header}
-      \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par%
-      \ifx\insertsubtitle\@empty%
-      \else%
-        \vskip0.25em%
-        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
-      \fi%
-    \end{beamercolorbox}%
-    \vskip1em\par
-    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
-      \usebeamerfont{author}\insertauthor
-    \end{beamercolorbox}
-    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
-      \usebeamerfont{institute}\insertinstitute
-    \end{beamercolorbox}
-    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
-      \usebeamerfont{date}\insertdate
-    \end{beamercolorbox}\vskip0.5em
-    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
-  \end{centering}
-  \vfill
-}
-
-% Alternative title page, you should use this in a frame with the [plain]
-% option.
-\defbeamertemplate*{title page alternative}{fancy theme}[1][]
-{
-  {\parskip0pt\offinterlineskip%
-    \hbox{\hskip-\Gm@lmargin\hbox{\vbox{%
-          \@tempdima=\textwidth\textwidth=\paperwidth\hsize=\textwidth\def\\{,}\vbox{}\vskip-3.7ex%
-          % Title.
-          \begin{beamercolorbox}[wd=\paperwidth,ht=.4\paperheight,center,#1]{title page header}
-            \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par%
-            \vspace{.125\paperheight}%
-          \end{beamercolorbox}%
-          % Subtitle
-          \begin{tikzpicture}[remember picture,overlay]
-            \def\dh{-0.075*\paperheight}
-            \def\dx{0.71*\paperwidth}
-            \def\dy{0.12*\paperheight}
-            \def\dxx{0.75*\paperwidth}
-            \draw[color = primary_black, fill = primary_gray]
-            (\paperwidth, \dh) -- ++(0, \dy)
-            -- ++(-\dxx, 0) -- ++(\dxx-\dx, -\dy) -- cycle;
-            \node[anchor = east, text width = 0.95*\dx] at
-            (\textwidth, \dh+0.5*\dy)
-            {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par};
-          \end{tikzpicture}%
-          \vbox{}\vskip0ex%
-          \vskip0pt%
-        }}%
-      \hskip-\Gm@rmargin%
-    }}\hfil%
-  %
+  % Title & Subtitle
+  \begin{tikzpicture}[remember picture,overlay]
+    \def\dh{-0.06*\paperheight}
+    \def\dx{0.71*\paperwidth}
+    \def\dy{0.12*\paperheight}
+    \def\dxx{0.75*\paperwidth}
+    \fill[primary_cyan]
+    (current page.north west) rectangle ++(\paperwidth, -.4\paperheight)
+    node [pos = 0.5, text width = .8\paperwidth, align = center]
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par};
+    \begin{scope}[shift = {(current page.north east)}]
+      \fill[primary_gray]
+      (0, \dh-.4\paperheight) -- ++(0, \dy)
+      -- ++(-\dxx, 0) -- ++(\dxx-\dx, -\dy) -- cycle;
+      \node[anchor = east, text width = 0.95*\dx] at
+      (0, \dh+0.5*\dy-.4\paperheight)
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par};
+    \end{scope}
+  \end{tikzpicture}%
+  \vskip3.5cm
   \begin{columns}
-    % \ifx\beamer@fancy@titlepagelogo\@empty%
-    % \column{\textwidth}
-    % \else
     \column{.35\textwidth}
     % Logo.
     \begin{centering}
@@ -167,7 +120,6 @@
       \vfill
     \end{centering}
     \column{.65\textwidth}
-    % \fi
     % Authors, institute and date
     \vskip1em\par
     \begin{beamercolorbox}[sep=8pt,center,#1]{author}
@@ -181,16 +133,6 @@
     \end{beamercolorbox}\vskip0.5em
     {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
   \end{columns}
-}
-
-\defbeamertemplate*{title page}{fancy}[1][]
-{
-  \def\beamer@fancy@truetext{true}%
-  \ifx\beamer@fancy@alternativetitlepage\beamer@fancy@truetext%
-    \usebeamertemplate{title page alternative}%
-  \else%
-    \usebeamertemplate{title page normal}%
-  \fi%
 }
 
 % Items.
@@ -261,7 +203,7 @@
   \end{beamercolorbox}}%
   \vskip0pt%
   \begin{tikzpicture}[remember picture,overlay]
-    \def\dx{1.25cm}
+    \def\dx{1.2cm}
     \def\dy{3.5*\dx/3}
     \def\dxx{4.3*\dx/3}
     \draw[color = primary_cyan, fill = primary_cyan]
@@ -284,7 +226,7 @@
 % \addtobeamertemplate{block example begin}{}{\vspace{-1ex}}
 
 \setbeamertemplate{frametitle}[default][left, leftskip = 1.6cm]
-\addtobeamertemplate{frametitle}{\vspace{-0.4ex}}{}%
+\addtobeamertemplate{frametitle}{\vskip-0.3ex}{\vskip0.4ex}%
 
 \useinnertheme{rectangles}
 \usefonttheme{professionalfonts}
