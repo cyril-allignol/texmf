@@ -4,6 +4,8 @@
 \RequirePackage{mathtools}
 \RequirePackage{maths}
 
+\RequirePackage{relsize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Formal languages commands
 
@@ -31,7 +33,7 @@
 \NewDocumentCommand{\derive}{so}{%
   \mathrel{%
     \IfBooleanTF{#1}{\stackrel{*}{\derivesymbol}}%
-    {\IfValueTF{#2}{\stackrel{\scriptsize #2}{\derivesymbol}}%
+    {\IfValueTF{#2}{\stackrel{\mathsmaller #2}{\derivesymbol}}%
       {\derivesymbol}}%
   }
 }
