@@ -1,6 +1,7 @@
 \mode<presentation>
 
 \RequirePackage{tikz}
+\RequirePackage{xparse}
 
 % Bullet shape.
 \DeclareOptionBeamer{bullet}{\def\beamer@fancy@bullet{#1}}
@@ -231,6 +232,8 @@
 \useinnertheme{rectangles}
 \usefonttheme{professionalfonts}
 \usepackage{arev} %font
+\RenewDocumentCommand{\textsc}{m}{%
+  \text{\expandafter\MakeUppercase\expandafter{#1}}}
 
 \mode
 <all>
