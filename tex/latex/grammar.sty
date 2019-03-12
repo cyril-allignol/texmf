@@ -1,24 +1,39 @@
-%% Greatly inspired by the "syntax" package by Mark Wooding
-
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{grammar}[2018/08/21 0.1 Typesetting BNF grammars]
+\ProvidesPackage{grammar}[2019/03/11 0.2 Typesetting BNF grammars]
 
-\RequirePackage{xparse}
-\RequirePackage{xifthen}
-\RequirePackage{xstring}
+\RequirePackage{expl3, xparse, xifthen, l3regex}
 \RequirePackage{synttree}
+\RequirePackage{mathtools}
+\RequirePackage{relsize}
+\RequirePackage{environ}
+\RequirePackage{catchfile}
 
 % \newif\if@classic
 % \@classicfalse
 % \DeclareOption{classic}{\@classictrue}
 % \ProcessOptions
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Custom grammar commands
+
+\DeclarePairedDelimiter{\token}{\langle}{\rangle}
+\NewDocumentCommand{\pointer}{m}{\stackrel{\text{\tiny #1}}{\longrightarrow}}
+\NewDocumentCommand{\derivesymbol}{}{\Rightarrow}
+\NewDocumentCommand{\derive}{so}{%
+  \mathrel{%
+    \IfBooleanTF{#1}{\stackrel{*}{\derivesymbol}}%
+    {\IfValueTF{#2}{\stackrel{\mathsmaller #2}{\derivesymbol}}%
+      {\derivesymbol}}%
+  }
+}
+\NewDocumentCommand{\lritemposition}{}{\mathbin{\bullet}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NewDocumentCommand{\bnfntfont}{}{\itshape}
 \NewDocumentCommand{\bnftsfont}{}{\bfseries\ttfamily}
 \NewDocumentCommand{\altop}{}{\mathrel{|}}
 \NewDocumentCommand{\bnfntleft}{}{}
-\NewDocumentCommand{\bnfntright}{}{}
+\NewDocumentCommand{\bnfntright}{}{\/}
 \NewDocumentCommand{\bnftsleft}{}{}
 \NewDocumentCommand{\bnftsright}{}{}
 \NewDocumentCommand{\productionop}{}{\mathrel{\rightarrow}}
@@ -33,82 +48,105 @@
 \NewDocumentCommand{\bnfnt}{m}{\text{\bnfntleft{\bnfntfont#1}\bnfntright}}
 \NewDocumentCommand{\bnfts}{m}{\text{\bnftsleft{\bnftsfont#1}\bnftsright}}
 
-\newboolean{numrules}\setboolean{numrules}{false}
-\newboolean{inline}\setboolean{inline}{false}
-\newboolean{inlinerules}\setboolean{inlinerules}{false}
-\newboolean{repeatnt}\setboolean{repeatnt}{true}
+\ExplSyntaxOn
+
+\keys_define:nn {grammar_keys} {%
+  expand .bool_set_inverse:N = \l_grammar_inlinerules,
+  expand .initial:n = false,
+  numbering .bool_set:N = \l_grammar_numrules,
+  numbering .initial:n = false,
+  numbers .meta:n = {expand, numbering},
+  inline .bool_set:N = \l_grammar_inline,
+  inline .initial:n = false,
+  repeatlhs .bool_set:N = \l_grammar_repeatlhs,
+  repeatlhs .initial:n = true,
+}
 
 \newcounter{ruleno}
-\NewDocumentCommand{\rulenumber}{}{{\color{gray}\arabic{ruleno}.}}
+\NewDocumentCommand{\rulenumber}{}{\color{gray}\arabic{ruleno}.}
 \NewDocumentCommand{\newrule}{}{%
   \stepcounter{ruleno}%
-  \item[\ifthenelse{\boolean{numrules}}{\rulenumber}{}]}
+\item[\bool_if:NTF \l_grammar_numrules {\rulenumber} {}]
+}
 
 \newsavebox{\rulelabel}
-
-\begingroup%
-\catcode`< = \active%
-\catcode`" = \active%
-\catcode`| = \active%
-\gdef\inlinerule{
-  \catcode`< = \active%
-  \catcode`" = \active%
-  \catcode`| = \active%
-  \def|={$\productionop$}%
-  \def|{$\altop$}
-}
-\gdef\prod#1|={%
-  \savebox{\rulelabel}{$#1 \productionop$}%
-  \ifthenelse{\boolean{inline}}%
-  {\usebox{\rulelabel}}%
-  {\newrule\usebox{\rulelabel}}}%
-\gdef|{%
-  \ifthenelse{\boolean{inlinerules}}%
-  {$\altop$}%
-  {\ifthenelse{\boolean{repeatnt}}%
-    {\newrule\usebox{\rulelabel}}%
-    {\newrule\makebox[\wd\rulelabel][r]{$\altop$}}}}%
-\gdef<#1>{\bnfnt{#1}}%
-\gdef"#1"{\bnfts{#1}}%
-\endgroup%
-\NewDocumentCommand{\activategrammar}{}{%
-  \catcode`< = \active%
-  \catcode`" = \active%
-  \catcode`| = \active%
+\ProvideDocumentCommand{\production}{}{}
+\ProvideDocumentCommand{\altprod}{}{}
+\NewEnviron{parsegrammar}{%
+  \RenewDocumentCommand{\production}{m}{%
+    \savebox{\rulelabel}{$##1 \productionop$}%
+    \bool_if:NTF {\l_grammar_inline}%
+    {\usebox{\rulelabel}}%
+    {\newrule\usebox{\rulelabel}}}%
+  \RenewDocumentCommand{\altprod}{}{%
+    \bool_if:NTF {\l_grammar_inlinerules}%
+    {$\altop$}%
+    {\bool_if:NTF {\l_grammar_repeatlhs}%
+      {\newrule\usebox{\rulelabel}}%
+      {\newrule\makebox[\wd\rulelabel][r]{$\altop$}}}}%
+  \regex_replace_all:nnN { \| } { \c{altprod} } \BODY
+  \regex_replace_all:nnN { \. } { \cM$\c{lritemposition}\cM$ } \BODY
+  \regex_replace_all:nnN { <([^<]+)>\s*::= } { \c{production}\cB\{\1\cE\} } \BODY
+  \regex_replace_all:nnN { <([^<]+)> } { \c{bnfnt}\cB\{\1\cE\} } \BODY
+  \regex_replace_all:nnN { "([^"]+)" } { \c{bnfts}\cB\{\1\cE\} } \BODY
+  \BODY
 }
 
-\NewDocumentEnvironment{inlinegrammar}{}
-{\setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar}{}
+\NewDocumentCommand{\inlinegrammar}{m}
+{ \group_begin:
+  \keys_set:nn {grammar_keys} {expand = false, numbering = false, inline = true }
+  \begin{parsegrammar}#1\end{parsegrammar}
+  \group_end:
+}
 
-% \NewDocumentCommand{\inlinerule}{m}{%
-%   \setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar%
-%   #1}
-\NewDocumentCommand{\lritem}{m}{%
-  \setboolean{inline}{true}\setboolean{inlinerules}{true}\activategrammar%
-  #1}
+\NewDocumentCommand{\lritem}{mo}
+{ \group_begin:
+  \keys_set:nn {grammar_keys} {expand = false, numbering = false, inline = true }
+  [\begin{parsegrammar}#1\end{parsegrammar}
+  \IfValueT{#2}{,\,#2}]
+  \group_end:
+}
 
-\NewDocumentEnvironment{grammar}{so}{%
-  \IfValueT{#2}{%
-    \IfStrEq{#2}{inlinerules}{\setboolean{inlinerules}{true}}{}%
-  }
+\NewDocumentEnvironment{grammar}{o}{%
+  \group_begin:
+  \IfValueT{#1}{\keys_set:nn {grammar_keys} {#1}}
+  \bool_set_false:N \l_grammar_inline%
   \setcounter{ruleno}{0}%
-  \setboolean{numrules}{\IfBooleanTF{#1}{false}{true}}%
-  \par\activategrammar%
+  \par%
   \list{}{%
-    \setlength{\labelwidth}{\IfBooleanTF{#1}{\z@}{1em}}
-    \setlength{\labelsep}{\IfBooleanTF{#1}{\z@}{0.4em}}
+    \setlength{\labelwidth}{\bool_if:NTF \l_grammar_numrules {1em} {\z@}}
+    \setlength{\labelsep}{\bool_if:NTF \l_grammar_numrules {0.4em} {\z@}}
     \setlength{\leftmargin}{\dimexpr \labelwidth + \labelsep}
     \setlength{\itemindent}{\z@}
     \setlength{\listparindent}{\z@}
     \setlength{\parsep}{\z@}
     \setlength{\itemsep}{\z@}
   }
-}{\endlist\par\relax\setboolean{inlinerules}{false}}
+  \parsegrammar
+}{\endparsegrammar\endlist\par\relax\group_end:}
 
 %% Place the star at a more intuitive position
-\ExplSyntaxOn
-\cs_new:cpn {grammar*} {\grammar*}
-\cs_new_eq:cN {endgrammar*} \endgrammar
+% \cs_new:cpn {grammar*} {\grammar*}
+% \cs_new_eq:cN {endgrammar*} \endgrammar
+
+\NewDocumentCommand{\inputgrammar}{som}{%
+  \CatchFileDef{\grammarfilecontents}{#3}{}
+  \group_begin:
+  \IfValueT{#2}{\keys_set:nn {grammar_keys} {#2}}
+  \bool_set_false:N \l_grammar_inline%
+  \setcounter{ruleno}{0}%
+  \par%
+  \list{}{%
+    \setlength{\labelwidth}{\bool_if:NTF \l_grammar_numrules {1em} {\z@}}
+    \setlength{\labelsep}{\bool_if:NTF \l_grammar_numrules {0.4em} {\z@}}
+    \setlength{\leftmargin}{\dimexpr \labelwidth + \labelsep}
+    \setlength{\itemindent}{\z@}
+    \setlength{\listparindent}{\z@}
+    \setlength{\parsep}{\z@}
+    \setlength{\itemsep}{\z@}
+  }
+  \expandafter\parsegrammar\grammarfilecontents\endparsegrammar\group_end:
+}
 \ExplSyntaxOff
 
 \endinput

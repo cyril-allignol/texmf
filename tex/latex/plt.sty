@@ -1,0 +1,33 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{plt}[2019/03/08 0.1 Programming languages theory]
+
+\RequirePackage{xparse}
+\RequirePackage{mathtools}
+\RequirePackage[ligature, inference]{semantic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Formal languages
+
+\DeclarePairedDelimiter{\length}{\lvert}{\rvert}
+\NewDocumentCommand{\emptyword}{}{\Lambda}
+\NewDocumentCommand{\concat}{}{\mathbin{\bullet}}
+\NewDocumentCommand{\epstrans}{}{\varepsilon}
+\NewDocumentCommand{\efermeture}{}{$\epstrans$-fermeture}
+\NewDocumentCommand{\trans}{s}{\mathrel{\vdash\IfBooleanT{#1}{^*}}}
+\NewDocumentCommand{\setquotient}{mm}{{#1}^{-1}#2}
+\NewDocumentCommand{\derivative}{mm}{D_{#1}\parentheses{#2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Typing
+\mathlig{|-}{\vdash}
+\NewDocumentCommand{\unit}{}{\text{Unit}}
+\NewDocumentCommand{\typing}{mmm}{#1 |- #2: #3} % Typing statement
+
+\NewDocumentCommand{\subtype}{}{\mathrel{<\kern-0.35em\raisebox{0.05em}{:}}}
+% \mathlig{<:}{\subtype}
+
+% \mathlig{:=}{\coloneqq}
+
+%% Semantics
+
+\endinput

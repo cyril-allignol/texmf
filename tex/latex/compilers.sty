@@ -4,40 +4,6 @@
 \RequirePackage{mathtools}
 \RequirePackage{maths}
 
-\RequirePackage{relsize}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Formal languages commands
-
-\DeclarePairedDelimiter{\length}{\lvert}{\rvert}
-\NewDocumentCommand{\emptyword}{}{\Lambda}
-\NewDocumentCommand{\concat}{}{\mathbin{\bullet}}
-\NewDocumentCommand{\epstrans}{}{\varepsilon}
-\NewDocumentCommand{\efermeture}{}{$\epstrans$-fermeture}
-\NewDocumentCommand{\trans}{s}{\mathrel{\vdash\IfBooleanT{#1}{^*}}}
-\NewDocumentCommand{\setquotient}{mm}{{#1}^{-1}#2}
-\NewDocumentCommand{\derivative}{mm}{D_{#1}\parentheses{#2}}
-
-
-%%%%%%%%%%%%%%%%%%%
-%% Typeset grammars
-
-\RequirePackage{grammar}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Custom grammar commands
-
-\DeclarePairedDelimiter{\token}{\langle}{\rangle}
-\NewDocumentCommand{\pointer}{m}{\stackrel{\text{\tiny #1}}{\longrightarrow}}
-\NewDocumentCommand{\derivesymbol}{}{\Rightarrow}
-\NewDocumentCommand{\derive}{so}{%
-  \mathrel{%
-    \IfBooleanTF{#1}{\stackrel{*}{\derivesymbol}}%
-    {\IfValueTF{#2}{\stackrel{\mathsmaller #2}{\derivesymbol}}%
-      {\derivesymbol}}%
-  }
-}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Custom compilation commands
 
