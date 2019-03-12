@@ -3,7 +3,7 @@
 
 \RequirePackage{expl3, xparse, xifthen, l3regex}
 \RequirePackage{synttree}
-\RequirePackage{mathtools}
+\RequirePackage{maths}
 \RequirePackage{relsize}
 \RequirePackage{environ}
 \RequirePackage{catchfile}
@@ -51,102 +51,106 @@
 \ExplSyntaxOn
 
 \keys_define:nn {grammar_keys} {%
-  expand .bool_set_inverse:N = \l_grammar_inlinerules,
+  expand .bool_set_inverse:N = \l__grammar_inlinerules,
   expand .initial:n = false,
-  numbering .bool_set:N = \l_grammar_numrules,
+  numbering .bool_set:N = \l__grammar_numrules,
   numbering .initial:n = false,
   numbers .meta:n = {expand, numbering},
-  inline .bool_set:N = \l_grammar_inline,
+  inline .bool_set:N = \l__grammar_inline,
   inline .initial:n = false,
-  repeatlhs .bool_set:N = \l_grammar_repeatlhs,
+  repeatlhs .bool_set:N = \l__grammar_repeatlhs,
   repeatlhs .initial:n = true,
 }
 
 \newcounter{ruleno}
-\NewDocumentCommand{\rulenumber}{}{\color{gray}\arabic{ruleno}.}
-\NewDocumentCommand{\newrule}{}{%
-  \stepcounter{ruleno}%
-\item[\bool_if:NTF \l_grammar_numrules {\rulenumber} {}]
+\cs_new:Nn \__grammar_newrule: {%
+  \stepcounter{ruleno}
+\item[\bool_if:NTF \l__grammar_numrules {\color{gray}\arabic{ruleno}.} {}]
 }
 
 \newsavebox{\rulelabel}
-\ProvideDocumentCommand{\production}{}{}
-\ProvideDocumentCommand{\altprod}{}{}
-\NewEnviron{parsegrammar}{%
-  \RenewDocumentCommand{\production}{m}{%
-    \savebox{\rulelabel}{$##1 \productionop$}%
-    \bool_if:NTF {\l_grammar_inline}%
-    {\usebox{\rulelabel}}%
-    {\newrule\usebox{\rulelabel}}}%
-  \RenewDocumentCommand{\altprod}{}{%
-    \bool_if:NTF {\l_grammar_inlinerules}%
-    {$\altop$}%
-    {\bool_if:NTF {\l_grammar_repeatlhs}%
-      {\newrule\usebox{\rulelabel}}%
-      {\newrule\makebox[\wd\rulelabel][r]{$\altop$}}}}%
-  \regex_replace_all:nnN { \| } { \c{altprod} } \BODY
-  \regex_replace_all:nnN { \. } { \cM$\c{lritemposition}\cM$ } \BODY
-  \regex_replace_all:nnN { <([^<]+)>\s*::= } { \c{production}\cB\{\1\cE\} } \BODY
-  \regex_replace_all:nnN { <([^<]+)> } { \c{bnfnt}\cB\{\1\cE\} } \BODY
-  \regex_replace_all:nnN { "([^"]+)" } { \c{bnfts}\cB\{\1\cE\} } \BODY
-  \BODY
+
+\cs_new:Nn \__grammar_production:n {%
+  \savebox{\rulelabel}{$#1 \productionop$}%
+  \bool_if:NTF {\l__grammar_inline}%
+  {\usebox{\rulelabel}}%
+  {\__grammar_newrule:\usebox{\rulelabel}}}%
+
+\cs_new:Nn \__grammar_altprod: {%
+  \bool_if:NTF {\l__grammar_inlinerules}%
+  {$\altop$}%
+  {\bool_if:NTF {\l__grammar_repeatlhs}%
+    {\__grammar_newrule:\usebox{\rulelabel}}%
+    {\__grammar_newrule:\makebox[\wd\rulelabel][r]{$\altop$}}}}%
+
+\cs_new:Nn \__grammarparse:n {%
+  \regex_replace_all:nnN { \| } { \c{__grammar_altprod:} } #1
+  \regex_replace_all:nnN { \· } { \cM$\c{lritemposition}\cM$ } #1
+  \regex_replace_all:nnN { <([^<]+)>\s*::= }
+  { \c{__grammar_production:n}\cB\{\1\cE\} } #1
+  \regex_replace_all:nnN { <([^<]+)> } { \c{bnfnt}\cB\{\1\cE\} } #1
+  \regex_replace_all:nnN { \"([^\"]+)\" } { \c{bnfts}\cB\{\1\cE\} } #1
+  #1
 }
 
+\NewEnviron{parsegrammar}{\__grammarparse:n \BODY}
+
+\cs_new:Nn \__grammar_typeset: {%
+  \group_begin:
+  \setcounter{ruleno}{0}%
+  \par%
+  \list{}{%
+    \setlength{\labelwidth}{\bool_if:NTF \l__grammar_numrules {1em} {\z@}}
+    \setlength{\labelsep}{\bool_if:NTF \l__grammar_numrules {0.4em} {\z@}}
+    \setlength{\leftmargin}{\dimexpr \labelwidth + \labelsep}
+    \setlength{\itemindent}{\z@}
+    \setlength{\listparindent}{\z@}
+    \setlength{\parsep}{\z@}
+    \setlength{\itemsep}{\z@}
+  }
+}
+\cs_new:Nn \__grammar_endtypeset: {\endlist\par\relax\group_end:}
+
+\cs_new:Nn \__grammartypeset:n {\__grammar_typeset: #1\__grammar_endtypeset:}
+
+\tl_new:N \l__rules
+\tl_new:N \l__previ
 \NewDocumentCommand{\inlinegrammar}{m}
 { \group_begin:
   \keys_set:nn {grammar_keys} {expand = false, numbering = false, inline = true }
-  \begin{parsegrammar}#1\end{parsegrammar}
+  \tl_set:Nn \l__rules {#1}
+  \__grammarparse:n \l__rules
   \group_end:
 }
 
 \NewDocumentCommand{\lritem}{mo}
 { \group_begin:
   \keys_set:nn {grammar_keys} {expand = false, numbering = false, inline = true }
-  [\begin{parsegrammar}#1\end{parsegrammar}
-  \IfValueT{#2}{,\,#2}]
+  \tl_set:Nn \l__rules {#1}
+  \tl_set:Nn \l__previ {#2}
+  [\__grammarparse:n \l__rules \IfValueT{#2}{,\,\__grammarparse:n \l__previ}]
   \group_end:
 }
 
+\makeatletter
 \NewDocumentEnvironment{grammar}{o}{%
   \group_begin:
   \IfValueT{#1}{\keys_set:nn {grammar_keys} {#1}}
-  \bool_set_false:N \l_grammar_inline%
-  \setcounter{ruleno}{0}%
-  \par%
-  \list{}{%
-    \setlength{\labelwidth}{\bool_if:NTF \l_grammar_numrules {1em} {\z@}}
-    \setlength{\labelsep}{\bool_if:NTF \l_grammar_numrules {0.4em} {\z@}}
-    \setlength{\leftmargin}{\dimexpr \labelwidth + \labelsep}
-    \setlength{\itemindent}{\z@}
-    \setlength{\listparindent}{\z@}
-    \setlength{\parsep}{\z@}
-    \setlength{\itemsep}{\z@}
-  }
+  \bool_set_false:N \l__grammar_inline%
+  \__grammar_typeset:
   \parsegrammar
-}{\endparsegrammar\endlist\par\relax\group_end:}
+}{\endparsegrammar\__grammar_endtypeset:\group_end:}
+\makeatother
 
-%% Place the star at a more intuitive position
-% \cs_new:cpn {grammar*} {\grammar*}
-% \cs_new_eq:cN {endgrammar*} \endgrammar
-
-\NewDocumentCommand{\inputgrammar}{som}{%
-  \CatchFileDef{\grammarfilecontents}{#3}{}
+\NewDocumentCommand{\inputgrammar}{om}{%
+  \CatchFileDef{\grammarfilecontents}{#2}{}
   \group_begin:
-  \IfValueT{#2}{\keys_set:nn {grammar_keys} {#2}}
-  \bool_set_false:N \l_grammar_inline%
-  \setcounter{ruleno}{0}%
-  \par%
-  \list{}{%
-    \setlength{\labelwidth}{\bool_if:NTF \l_grammar_numrules {1em} {\z@}}
-    \setlength{\labelsep}{\bool_if:NTF \l_grammar_numrules {0.4em} {\z@}}
-    \setlength{\leftmargin}{\dimexpr \labelwidth + \labelsep}
-    \setlength{\itemindent}{\z@}
-    \setlength{\listparindent}{\z@}
-    \setlength{\parsep}{\z@}
-    \setlength{\itemsep}{\z@}
-  }
-  \expandafter\parsegrammar\grammarfilecontents\endparsegrammar\group_end:
+  \IfValueT{#1}{\keys_set:nn {grammar_keys} {#1}}
+  \bool_set_false:N \l__grammar_inline%
+  \__grammartypeset:n {\expandafter\__grammarparse:n {\grammarfilecontents}}%
+  \group_end:
 }
+
 \ExplSyntaxOff
 
 \endinput
