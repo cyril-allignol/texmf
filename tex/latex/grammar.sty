@@ -123,12 +123,14 @@
   \group_end:
 }
 
-\NewDocumentCommand{\lritem}{mo}
+\NewDocumentCommand{\lritem}{smo}
 { \group_begin:
   \keys_set:nn {grammar_keys} {expand = false, numbering = false, inline = true }
-  \tl_set:Nn \l__rules {#1}
-  \tl_set:Nn \l__previ {#2}
-  [\__grammarparse:n \l__rules \IfValueT{#2}{,\,\__grammarparse:n \l__previ}]
+  \tl_set:Nn \l__rules {#2}
+  \tl_set:Nn \l__previ {#3}
+  \IfBooleanF{#1}{[}
+  \__grammarparse:n \l__rules \IfValueT{#3}{,\,\__grammarparse:n \l__previ}
+  \IfBooleanF{#1}{]}
   \group_end:
 }
 
