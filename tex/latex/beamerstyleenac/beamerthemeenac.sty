@@ -90,8 +90,7 @@
 \setlength\leftmarginiii{.6\beamer@fancy@normalmargin}
 
 % Title page, you should use this in a frame with the [plain] option.
-\defbeamertemplate*{title page}{fancy}[1][]
-{
+\defbeamertemplate*{title page}{fancy}[1][]{%
   % Title & Subtitle
   \begin{tikzpicture}[remember picture,overlay]
     \def\dh{-0.06*\paperheight}
@@ -111,29 +110,29 @@
       {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par};
     \end{scope}
   \end{tikzpicture}%
-  \vskip3.5cm
-  \begin{columns}
-    \column{.35\textwidth}
+  \vskip3.5cm%
+  \begin{columns}%
+    \column{.35\textwidth}%
     % Logo.
-    \begin{centering}
-      \vbox{}\vfill
-      \includegraphics[height=.25\paperheight]{resources/enac-darkgray}
-      \vfill
-    \end{centering}
-    \column{.65\textwidth}
+    \begin{centering}%
+      \vbox{}\vfill%
+      \includegraphics[height=.25\paperheight]{resources/enac-darkgray}%
+      \vfill%
+    \end{centering}%
+    \column{.65\textwidth}%
     % Authors, institute and date
-    \vskip1em\par
-    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
-      \usebeamerfont{author}\insertauthor
-    \end{beamercolorbox}
-    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}
-      \usebeamerfont{institute}\insertinstitute
-    \end{beamercolorbox}
-    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
-      \usebeamerfont{date}\insertdate
-    \end{beamercolorbox}\vskip0.5em
-    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
-  \end{columns}
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}%
+      \usebeamerfont{author}\insertauthor%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[sep=8pt,center,#1]{institute}%
+      \usebeamerfont{institute}\insertinstitute%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}%
+      \usebeamerfont{date}\insertdate%
+    \end{beamercolorbox}\vskip0.5em%
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}%
+  \end{columns}%
 }
 
 % Items.
@@ -158,22 +157,21 @@
   \setbeamertemplate{items}[squarealt]
 \fi
 
-\defbeamertemplate*{footline}{infolines theme}
-{
+\defbeamertemplate*{footline}{infolines theme}{%
   \leavevmode%
   \hbox{%
-  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
-    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\beamer@ifempty\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
-  \end{beamercolorbox}%
-  \hspace{-0.001\paperwidth}%
-  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
-    \usebeamerfont{title in head/foot}\insertshorttitle
-  \end{beamercolorbox}%
-  \hspace{-0.001\paperwidth}%
-  \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
-    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
-    %\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
-  \end{beamercolorbox}}%
+    \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\beamer@ifempty\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}%
+    \end{beamercolorbox}%
+    \hspace{-0.001\paperwidth}%
+    \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+      \usebeamerfont{title in head/foot}\insertshorttitle%
+    \end{beamercolorbox}%
+    \hspace{-0.001\paperwidth}%
+    \begin{beamercolorbox}[wd=.334\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}%
+      % \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+    \end{beamercolorbox}}%
   \vskip0pt%
   \begin{tikzpicture}[remember picture,overlay]
     \def\dx{0.6cm}
@@ -187,22 +185,21 @@
   \end{tikzpicture}%
 }
 
-\defbeamertemplate*{headline}{}
-{
+\defbeamertemplate*{headline}{}{%
   \leavevmode%
   \hbox{%
-  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2ex,dp=.5ex,right]{section in head/foot}%
-    \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}
-  \end{beamercolorbox}%
-  \hspace{-0.001\paperwidth}%
-  \begin{beamercolorbox}[wd=.41\paperwidth,ht=2ex,dp=.5ex,left]{subsection in head/foot}%
-    \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertsubsectionhead
-  \end{beamercolorbox}%
-  \hspace{-0.01\paperwidth}%
-  \begin{beamercolorbox}[wd=.11\paperwidth,ht=2ex,dp=.5ex,left]{subsection in head/foot}%
-    \usebeamerfont{subsection in head/foot}\hspace*{2ex}
-    \hfill\insertframenumber{} / \inserttotalframenumber
-  \end{beamercolorbox}}%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2ex,dp=.5ex,right]{section in head/foot}%
+      \usebeamerfont{section in head/foot}\insertsectionhead\hspace*{2ex}%
+    \end{beamercolorbox}%
+    \hspace{-0.001\paperwidth}%
+    \begin{beamercolorbox}[wd=.41\paperwidth,ht=2ex,dp=.5ex,left]{subsection in head/foot}%
+      \usebeamerfont{subsection in head/foot}\hspace*{2ex}\insertsubsectionhead%
+    \end{beamercolorbox}%
+    \hspace{-0.01\paperwidth}%
+    \begin{beamercolorbox}[wd=.11\paperwidth,ht=2ex,dp=.5ex,left]{subsection in head/foot}%
+      \usebeamerfont{subsection in head/foot}\hspace*{2ex}%
+      \hfill\insertframenumber{} / \inserttotalframenumber%
+    \end{beamercolorbox}}%
   \vskip0pt%
   \begin{tikzpicture}[remember picture,overlay]
     \def\dx{1.2cm}
