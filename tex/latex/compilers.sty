@@ -7,9 +7,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Custom compilation commands
 
+\NewDocumentCommand{\nullable}{o}{\mathrm{nullable}\IfValueT{#1}{(#1)}}
 \NewDocumentCommand{\first}{o}{\textsc{first}\IfValueT{#1}{(#1)}}
 \NewDocumentCommand{\last}{o}{\textsc{last}\IfValueT{#1}{(#1)}}
 \NewDocumentCommand{\follow}{o}{\textsc{follow}\IfValueT{#1}{(#1)}}
+
+\NewDocumentCommand{\items}{o}{\ensuremath{\mathcal{I}\IfValueT{#1}{_{#1}}}}
+\NewDocumentCommand{\shift}{so}{%
+  \textbf{\textit{\IfBooleanTF{#1}{sh.}{shift}}}\IfValueT{#2}{\;\items[#2]}}
+\NewDocumentCommand{\reduce}{so}{%
+  \textbf{\textit{\IfBooleanTF{#1}{r.}{reduce}}}\IfValueT{#2}{\;#2}}
+\NewDocumentCommand{\accept}{so}{%
+  \IfBooleanTF{#1}{%
+    \textbf{\textit{OK}}%
+  }{\textbf{\textit{accept}}\IfValueT{#2}{\;\bnfnt{#2}}}}
 
 \RequirePackage{tikz}
 \usetikzlibrary{calc, arrows, shapes, positioning, automata}
