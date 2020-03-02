@@ -22,6 +22,10 @@
     \textbf{\textit{OK}}%
   }{\textbf{\textit{accept}}\IfValueT{#2}{\;\bnfnt{#2}}}}
 
+\NewDocumentCommand{\lr}{o}{\text{LR}\IfValueT{#1}{\ensuremath{(#1)}}}
+\NewDocumentCommand{\lalr}{o}{\text{LALR}\IfValueT{#1}{\ensuremath{(#1)}}}
+\NewDocumentCommand{\slr}{o}{\text{SLR}\IfValueT{#1}{\ensuremath{(#1)}}}
+
 \RequirePackage{tikz}
 \usetikzlibrary{calc, arrows, shapes, positioning, automata}
 
